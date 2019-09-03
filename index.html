@@ -8,5 +8,78 @@
   </head>
   <body>
     hello world
+
+    <form action="cgi-bin/aaa.cgi" method="post">
+      <table border="0">
+        <tr>
+          <td align="right"><b> 名前：</b></td>
+          <td><input type="text" name="name" size="30" maxlength="20" /></td>
+        </tr>
+        <tr>
+          <td align="right"><b> パスワード：</b></td>
+          <td><input type="password" name="pass" size="6" maxlength="4" /></td>
+        </tr>
+        <tr>
+          <td align="right"><b>学年：</b></td>
+          <td>
+            <input type="radio" name="gakunen" value="１年生" />１年生
+            <input type="radio" name="gakunen" value="２年生" />２年生
+            <input type="radio" name="gakunen" value="３年生" />３年生
+            <input type="radio" name="gakunen" value="４年生" />４年生
+            <input type="radio" name="gakunen" value="５年生" />５年生
+            <input type="radio" name="gakunen" value="６年生" />６年生
+          </td>
+        </tr>
+        <tr>
+          <td align="right"><b>好きな課目：</b></td>
+          <td>
+            <input type="checkbox" name="kamoku" value="国語" />国語
+            <input type="checkbox" name="kamoku" value="英語" />英語
+            <input type="checkbox" name="kamoku" value="算数" />算数
+            <input type="checkbox" name="kamoku" value="理科" />理科
+            <input type="checkbox" name="kamoku" value="社会" />社会
+            <input type="checkbox" name="kamoku" value="体育" />体育
+          </td>
+        </tr>
+        <tr>
+          <td align="right"><b>宿題ファイル：</b></td>
+          <td><input type="file" name="syukudai" /></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <input type="submit" value="送信" />
+            <input type="reset" value="リセット" />
+          </td>
+        </tr>
+      </table>
+
+      <p>
+        血液型：<br />
+        <select name="blood">
+          <option value="A">A型</option>
+          <option value="B">B型</option>
+          <option value="O">O型</option>
+          <option value="AB">AB型</option>
+        </select>
+      </p>
+      <select
+        >星座：<br />
+        <select name="horoscope" size="12">
+          <option value="Aries">おひつじ座</option>
+          <option value="Taurus">おうし座</option>
+          <option value="Gemini">ふたご座</option>
+          <option value="Cancer">かに座</option>
+          <option value="Leo">しし座</option>
+          <option value="Virgo">おとめ座</option>
+          <option value="Libra">てんびん座</option>
+          <option value="Scorpio">さそり座</option>
+          <option value="Saggitarius">いて座</option>
+          <option value="Capricorn">やぎ座</option>
+          <option value="Aquarius">みずがめ座</option>
+          <option value="Pisces">うお座</option>
+        </select></select
+      >
+    </form>
   </body>
 </html>
