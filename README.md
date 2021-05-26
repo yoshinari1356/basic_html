@@ -9,6 +9,4 @@ https://yoshinari1356.github.io/basic_html/
 これで十分だった
 https://webliker.info/39533/
 
-angular material
-https://material.angular.io/components/categories/forms
 
