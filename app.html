@@ -29,5 +29,18 @@
       }
     });
   </script>
+  <div>
+    <h4>geolocation</h4>
+    <p class="latitude"></p>
+    <p class="longitude"></p>
+  </div>
+  <script>
+    navigator.geolocation.getCurrentPosition(x => {
+      const lat = x.coords.latitude
+      const lng = x.coords.longitude
+      document.querySelector(".latitude").innerText = lat
+      document.querySelector(".longitude").innerText = lng
+    }
+  </script>
 </body>
 </html>
