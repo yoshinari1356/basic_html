@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>performance.memoryを表示</title>
+</head>
+<body>
+  <section>
+    <h2>performance.memoryを表示</h2>
+    <p>console.memoryも同様</p>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Performance/memory">developer.mozilla.org/en-US/docs/Web/API/Performance/memory</a></p>
+    <strong>jsHeapSizeLimit</strong>
+    <p>コンテキストで使用可能なヒープの最大サイズ（バイト単位）</p>
+    <div id="jsHeapSizeLimit" class="value">-</div>
+    <strong>totalJSHeapSize</strong>
+    <p>割り当てられたヒープの合計サイズ（バイト単位）</p>
+    <div id="totalJSHeapSize" class="value">-</div>
+    <strong>usedJSHeapSize</strong>
+    <p>JSヒープの現在アクティブなセグメント（バイト単位）</p>
+    <div id="usedJSHeapSize" class="value">-</div>
+  </section>
+  <style>
+    section {
+      max-width: 500px;
+      margin: auto;
+    }
+    .value {
+      text-align: end;
+    }
+  </style>
+  <script>
+    setInterval(x=>{
+      memoryInfo = performance.memory
+      document.getElementById("jsHeapSizeLimit").innerText = memoryInfo.jsHeapSizeLimit.toLocaleString()
+      document.getElementById("totalJSHeapSize").innerText = memoryInfo.totalJSHeapSize.toLocaleString()
+      document.getElementById("usedJSHeapSize").innerText = memoryInfo.usedJSHeapSize.toLocaleString()
+    }, 1000)
+  </script>
+</body>
+</html>
