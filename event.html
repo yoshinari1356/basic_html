@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>event</title>
+</head>
+<body>
+  <section>
+    <h2>event</h2>
+    <p>コンソールを見てください</p>
+    <p><a href="https://html.spec.whatwg.org/multipage/indices.html#event-domcontentloaded">https://html.spec.whatwg.org/multipage/indices.html#event-domcontentloaded</a></p>
+  </section>
+  <style>
+    section {
+      max-width: 500px;
+      margin: auto;
+    }
+    .value {
+      text-align: end;
+    }
+  </style>
+  <script>
+
+    document.addEventListener("DOMContentLoaded", x => { console.log("DOMContentLoaded")});
+    document.addEventListener("readystatechange", x => { console.log("readystatechange", document.readyState)});
+    document.addEventListener("visibilitychange", x => { console.log("visibilitychange")});
+
+    window.addEventListener("afterprint", function(e) { console.log("afterprint")});
+    window.addEventListener('beforeprint', function(e) { console.log('beforeprint')});
+    window.addEventListener('beforeunload', function(e) { console.log('beforeunload')});
+    window.addEventListener('hashchange', function(e) { console.log('hashchange')});
+    window.addEventListener('pagehide', function(e) { console.log('pagehide')});
+    window.addEventListener('pageshow', function(e) { console.log('pageshow')});
+    window.addEventListener('popstate', function(e) { console.log('popstate')});
+    window.addEventListener('storage', function(e) { console.log('storage')});
+    window.addEventListener('unload', function(e) { console.log('unload')});
+
+    window.addEventListener('blur', function(e) { console.log('blur')});
+    window.addEventListener('focus', function(e) { console.log('focus')});
+    window.addEventListener('load', function(e) { console.log('load')});
+
+  </script>
+</body>
+</html>
