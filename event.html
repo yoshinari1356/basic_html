@@ -17,27 +17,9 @@
   <section>
     <h2>window/document load</h2>
     <p>コンソールを見てください</p>
-    <pre>
-      document.addEventListener("DOMContentLoaded", x => { console.log("document DOMContentLoaded")});
-      document.addEventListener("readystatechange", x => { console.log("document readystatechange", document.readyState)});
-      document.addEventListener("visibilitychange", x => { console.log("document visibilitychange")});
-
-      window.addEventListener('blur', function(e) { console.log('window blur')});
-      window.addEventListener('focus', function(e) { console.log('window focus')});
-      window.addEventListener('load', function(e) { console.log('window load')});
-
-      window.addEventListener("afterprint", function(e) { console.log("window afterprint")});
-      window.addEventListener('beforeprint', function(e) { console.log('window beforeprint')});
-      window.addEventListener('beforeunload', function(e) { console.log('window beforeunload')});
-      window.addEventListener('hashchange', function(e) { console.log('window hashchange')});
-      window.addEventListener('pagehide', function(e) { console.log('window pagehide')});
-      window.addEventListener('pageshow', function(e) { console.log('window pageshow')});
-      window.addEventListener('popstate', function(e) { console.log('window popstate')});
-      window.addEventListener('storage', function(e) { console.log('window storage')});
-      window.addEventListener('unload', function(e) { console.log('window unload')});
-      window.addEventListener('contextmenu', function(e) { console.log('window contextmenu')});
-    </pre>
-    <script>
+    <pre><code id="code_script_load"></pre>
+    </code>
+    <script id="script_load">
 
       document.addEventListener("DOMContentLoaded", x => { console.log("document DOMContentLoaded")});
       document.addEventListener("readystatechange", x => { console.log("document readystatechange", document.readyState)});
@@ -75,36 +57,9 @@
       </select>
     </div>
     <div><img id="img" src="./images/icon_128_128.png"></div>
-    <pre>
-      const txt_elm = document.getElementById("txt")
-      txt_elm.addEventListener('blur', function(e) { console.log('txt_elm blur')});
-      txt_elm.addEventListener('focus', function(e) { console.log('txt_elm focus')});
-      txt_elm.addEventListener('change', function(e) { console.log('txt_elm change')});
-      txt_elm.addEventListener('input', function(e) { console.log('txt_elm input')});
-      txt_elm.addEventListener('invalid', function(e) { console.log('txt_elm invalid')});
-      txt_elm.addEventListener('select', function(e) { console.log('txt_elm select')});
-      txt_elm.addEventListener('load', function(e) { console.log('txt_elm load', txt_elm)});
-      txt_elm.addEventListener('contextmenu', function(e) { console.log('txt_elm contextmenu')});
-      txt_elm.addEventListener('copy', function(e) { console.log('txt_elm copy')});
-      txt_elm.addEventListener('cut', function(e) { console.log('txt_elm cut')});
-      txt_elm.addEventListener('paste', function(e) { console.log('txt_elm paste')});
-
-      const slct_elm = document.getElementById("slct")
-      slct_elm.addEventListener('click', function(e) { console.log('slct_elm click')});
-      slct_elm.addEventListener('blur', function(e) { console.log('slct_elm blur')});
-      slct_elm.addEventListener('focus', function(e) { console.log('slct_elm focus')});
-      slct_elm.addEventListener('change', function(e) { console.log('slct_elm change')});
-      slct_elm.addEventListener('input', function(e) { console.log('slct_elm input')});
-      slct_elm.addEventListener('invalid', function(e) { console.log('slct_elm invalid')});
-      slct_elm.addEventListener('select', function(e) { console.log('slct_elm select')});
-      slct_elm.addEventListener('load', function(e) { console.log('slct_elm load', slct_elm)});
-      slct_elm.addEventListener('contextmenu', function(e) { console.log('slct_elm contextmenu')});
-
-      const img_elm = document.getElementById("img")
-      img_elm.addEventListener('load', function(e) { console.log('img_elm load', img_elm)});
-      img_elm.addEventListener('contextmenu', function(e) { console.log('img_elm contextmenu')});
-    </pre>
-    <script>
+    <pre><code id="code_script_input"></pre>
+    </code>
+    <script id="script_input">
       const txt_elm = document.getElementById("txt")
       txt_elm.addEventListener('blur', function(e) { console.log('txt_elm blur')});
       txt_elm.addEventListener('focus', function(e) { console.log('txt_elm focus')});
@@ -158,35 +113,10 @@
       </dialog>
 
       <button id="updateDetails">Update details</button>
-      <pre>
-        // dialog
-        var updateButton = document.getElementById('updateDetails');
-        var favDialog = document.getElementById('favDialog');
-        var selectElm = document.querySelector('#favDialog select');
-        var confirmBtn = document.getElementById('dialogConfirmBtn');
-
-        // "Update details" button opens the &lt;dialog> modally
-        updateButton.addEventListener('click', function onOpen() {
-          console.log('dialog updateButton click', updateButton)
-          if (typeof favDialog.showModal === "function") {
-            favDialog.showModal();
-          } else {
-            alert("The &lt;dialog> API is not supported by this browser");
-          }
-        });
-        // "Favorite animal" input sets the value of the submit button
-        selectElm.addEventListener('change', function onSelect(e) {
-          console.log('dialog selectElm change', selectElm)
-          confirmBtn.value = selectElm.value;
-        });
-        // "Confirm" button of form triggers "close" on dialog because of [method="dialog"]
-        favDialog.addEventListener('close', function onClose() {
-          console.log('dialog favDialog close', favDialog)
-        });
-      </pre>
+      <pre><code id="code_script_dialog"></code></pre>
 
     </div>
-    <script>
+    <script id="script_dialog">
       {
         // dialog
         var updateButton = document.getElementById('updateDetails');
@@ -228,15 +158,23 @@
       <dt>Dimensions:</dt> <dd>320×240</dd>
      </dl>
     </details>
-    <pre>
-      const detail_elm = document.getElementById("detail")
-      detail_elm.addEventListener('toggle', function(e) { console.log('detail_elm toggle', detail_elm)});
-    </pre>
-    <script>
+    <pre><code id="code_script_datail"></code></pre>
+    <script id="script_datail">
       const detail_elm = document.getElementById("detail")
       detail_elm.addEventListener('toggle', function(e) { console.log('detail_elm toggle', detail_elm)});
     </script>
    </section>
+  <script>
+    // 各スクリプトタグをcodeタグにコピーして表示する
+    Array.prototype.forEach.call(document.scripts,elm => {
+      if(elm.id != '') {
+        code_elm = document.getElementById("code_" + elm.id)
+        if(code_elm) {
+          code_elm.innerText = elm.innerText
+        }
+      }
+    })
+  </script>
   <style>
     section {
       max-width: 500px;
