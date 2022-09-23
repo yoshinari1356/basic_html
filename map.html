@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map</title>
+</head>
+<body>
+  <h1>GoogleMap</h1>
+  <section>
+    <h2>単純に地図を載せるだけ</h2>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1722.9087821208896!2d139.69383453982437!3d35.68989078568895!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188cd4b71a37a1%3A0xf1665c37f38661e8!2z5p2x5Lqs6YO95bqB!5e0!3m2!1sja!2sjp!4v1663833543684!5m2!1sja!2sjp" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </section>
+  <section>
+    <!-- <h2>GoogleMapAPI</h2>
+    <section>
+      <h3>simple</h3>
+      <div id="map"></div>
+      <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtqjDbVV9ySxQGoPJtK84DszPnCGE0IcU&callback=initMap"
+        defer
+      ></script>
+      <script>
+        let map;
+
+        function initMap() {
+          map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 35.6896342, lng: 139.6921007 },
+            zoom: 16,
+          });
+        }
+
+        window.initMap = initMap;
+      </script>
+    </section> -->
+    <!-- <section>
+      <h3>マーカークラスタリング</h3>
+      <p>https://developers.google.com/maps/documentation/javascript/marker-clustering?hl=ja</p>
+      <div id="map"></div>
+      <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtqjDbVV9ySxQGoPJtK84DszPnCGE0IcU&callback=initMap"
+        defer
+      ></script>
+      <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
+      <script>
+        function initMap() {
+          console.log("initMap")
+          const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 3,
+            center: { lat: -28.024, lng: 140.887 },
+          });
+          const infoWindow = new google.maps.InfoWindow({
+            content: "",
+            disableAutoPan: true,
+          });
+          // Create an array of alphabetical characters used to label the markers.
+          const labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          // Add some markers to the map.
+          const markers = locations.map((position, i) => {
+            const label = labels[i % labels.length];
+            const marker = new google.maps.Marker({
+              position,
+              label,
+            });
+
+            // markers can only be keyboard focusable when they have click listeners
+            // open info window when marker is clicked
+            marker.addListener("click", () => {
+              infoWindow.setContent(label);
+              infoWindow.open(map, marker);
+            });
+            return marker;
+          });
+
+          // Add a marker clusterer to manage the markers.
+          new markerClusterer.MarkerClusterer({ markers, map });
+        }
+
+        const locations = [
+          { lat: -31.56391, lng: 147.154312 },
+          { lat: -33.718234, lng: 150.363181 },
+          { lat: -33.727111, lng: 150.371124 },
+          { lat: -33.848588, lng: 151.209834 },
+          { lat: -33.851702, lng: 151.216968 },
+          { lat: -34.671264, lng: 150.863657 },
+          { lat: -35.304724, lng: 148.662905 },
+          { lat: -36.817685, lng: 175.699196 },
+          { lat: -36.828611, lng: 175.790222 },
+          { lat: -37.75, lng: 145.116667 },
+          { lat: -37.759859, lng: 145.128708 },
+          { lat: -37.765015, lng: 145.133858 },
+          { lat: -37.770104, lng: 145.143299 },
+          { lat: -37.7737, lng: 145.145187 },
+          { lat: -37.774785, lng: 145.137978 },
+          { lat: -37.819616, lng: 144.968119 },
+          { lat: -38.330766, lng: 144.695692 },
+          { lat: -39.927193, lng: 175.053218 },
+          { lat: -41.330162, lng: 174.865694 },
+          { lat: -42.734358, lng: 147.439506 },
+          { lat: -42.734358, lng: 147.501315 },
+          { lat: -42.735258, lng: 147.438 },
+          { lat: -43.999792, lng: 170.463352 },
+        ];
+
+        window.initMap = initMap;
+
+      </script>
+    </section> -->
+    <!-- <section>
+      <h3>カスタムマーカー</h3>
+      <p>https://developers.google.com/maps/documentation/javascript/marker-clustering?hl=ja</p>
+      <div id="map"></div>
+      <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtqjDbVV9ySxQGoPJtK84DszPnCGE0IcU&callback=initMap"
+        defer
+      ></script>
+      <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
+      <script>
+        let map;
+        function initMap() {
+          map = new google.maps.Map(document.getElementById("map"), {
+            center: new google.maps.LatLng(-33.91722, 151.23064),
+            zoom: 16,
+          });
+
+          const iconBase =
+            "https://developers.google.com/maps/documentation/javascript/examples/full/images/";
+          const icons = {
+            me: {
+              icon: "images/icon_128_128.png",
+            },
+            parking: {
+              icon: iconBase + "parking_lot_maps.png",
+            },
+            library: {
+              icon: iconBase + "library_maps.png",
+            },
+            info: {
+              icon: iconBase + "info-i_maps.png",
+            },
+          };
+          const features = [
+            {
+              position: new google.maps.LatLng(-33.91721, 151.2263),
+              type: "me",
+            },
+            {
+              position: new google.maps.LatLng(-33.91539, 151.2282),
+              type: "me",
+            },
+            {
+              position: new google.maps.LatLng(-33.91747, 151.22912),
+              type: "info",
+            },
+            {
+              position: new google.maps.LatLng(-33.9191, 151.22907),
+              type: "info",
+            },
+            {
+              position: new google.maps.LatLng(-33.91725, 151.23011),
+              type: "info",
+            },
+            {
+              position: new google.maps.LatLng(-33.91872, 151.23089),
+              type: "info",
+            },
+            {
+              position: new google.maps.LatLng(-33.91784, 151.23094),
+              type: "info",
+            },
+            {
+              position: new google.maps.LatLng(-33.91682, 151.23149),
+              type: "info",
+            },
+            {
+              position: new google.maps.LatLng(-33.9179, 151.23463),
+              type: "info",
+            },
+            {
+              position: new google.maps.LatLng(-33.91666, 151.23468),
+              type: "info",
+            },
+            {
+              position: new google.maps.LatLng(-33.916988, 151.23364),
+              type: "info",
+            },
+            {
+              position: new google.maps.LatLng(-33.91662347903106, 151.22879464019775),
+              type: "parking",
+            },
+            {
+              position: new google.maps.LatLng(-33.916365282092855, 151.22937399734496),
+              type: "parking",
+            },
+            {
+              position: new google.maps.LatLng(-33.91665018901448, 151.2282474695587),
+              type: "parking",
+            },
+            {
+              position: new google.maps.LatLng(-33.919543720969806, 151.23112279762267),
+              type: "parking",
+            },
+            {
+              position: new google.maps.LatLng(-33.91608037421864, 151.23288232673644),
+              type: "parking",
+            },
+            {
+              position: new google.maps.LatLng(-33.91851096391805, 151.2344058214569),
+              type: "parking",
+            },
+            {
+              position: new google.maps.LatLng(-33.91818154739766, 151.2346203981781),
+              type: "parking",
+            },
+            {
+              position: new google.maps.LatLng(-33.91727341958453, 151.23348314155578),
+              type: "library",
+            },
+          ];
+
+          // Create markers.
+          for (let i = 0; i < features.length; i++) {
+            const marker = new google.maps.Marker({
+              position: features[i].position,
+              icon: icons[features[i].type].icon,
+              map: map,
+            });
+          }
+        }
+
+        window.initMap = initMap;
+
+      </script>
+    </section> -->
+    <section>
+      <h3>情報ウィンドウ</h3>
+      <p>https://developers.google.com/maps/documentation/javascript/marker-clustering?hl=ja</p>
+      <div id="infomap" class="map"></div>
+      <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtqjDbVV9ySxQGoPJtK84DszPnCGE0IcU&callback=initInfoMap"
+        defer
+      ></script>
+      <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
+      <script>
+        // This example displays a marker at the center of Australia.
+        // When the user clicks the marker, an info window opens.
+        function initInfoMap() {
+          const tokyo = { lat: 35.6896342, lng: 139.6921007 };
+          const map = new google.maps.Map(document.getElementById("infomap"), {
+            zoom: 15,
+            center: tokyo,
+          });
+          const contentString =
+            '<div id="content">' +
+            '<div id="siteNotice">' +
+            "</div>" +
+            '<h1 id="firstHeading" class="firstHeading">tokyo</h1>' +
+            '<div id="bodyContent">' +
+            "<p>テキストテキスト</p>" +
+            "</div>" +
+            "</div>";
+          const infowindow = new google.maps.InfoWindow({
+            content: contentString,
+          });
+          const marker = new google.maps.Marker({
+            position: tokyo,
+            map,
+            title: "tokyo",
+          });
+
+          marker.addListener("click", () => {
+            console.log("marker click")
+            infowindow.open({
+              anchor: marker,
+              map,
+              shouldFocus: false,
+            });
+          });
+          // infoWindow.addListener('closeclick', ()=>{
+          //   console.log("closeclick")
+          //   // Handle focus manually.
+          // });
+        }
+
+        window.initInfoMap = initInfoMap;
+      </script>
+    </section>
+    <style>
+      #map,
+      .map {
+        height: 300px;
+      }
+    </style>
+  </section>
+</body>
+</html>
