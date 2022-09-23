@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map</title>
+</head>
+<body>
+  <h1>GoogleMap</h1>
+  <nav class="">
+    <ol>
+        <li class=""><a href="map.html">map</a></li>
+        <li class=""><a href="map_simple.html">map_simple</a></li>
+        <li class=""><a href="map_api_custom_marker.html">map_api_custom_marker</a></li>
+        <li class=""><a href="map_api_info_window.html">map_api_info_window</a></li>
+        <li class=""><a href="map_api_marker_clustering.html">map_api_marker_clustering</a></li>
+    </ol>
+  </nav>
+  <section>
+    <section>
+      <h3>情報ウィンドウ</h3>
+      <div id="infomap" class="map"></div>
+      <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtqjDbVV9ySxQGoPJtK84DszPnCGE0IcU&callback=initInfoMap"
+        defer
+      ></script>
+      <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
+      <script>
+        // This example displays a marker at the center of Australia.
+        // When the user clicks the marker, an info window opens.
+        function initInfoMap() {
+          const tokyo = { lat: 35.6896342, lng: 139.6921007 };
+          const map = new google.maps.Map(document.getElementById("infomap"), {
+            zoom: 15,
+            center: tokyo,
+          });
+          const contentString =
+            '<div id="content">' +
+            '<div id="siteNotice">' +
+            "</div>" +
+            '<h1 id="firstHeading" class="firstHeading">tokyo</h1>' +
+            '<div id="bodyContent">' +
+            "<p>テキストテキスト</p>" +
+            "</div>" +
+            "</div>";
+          const infowindow = new google.maps.InfoWindow({
+            content: contentString,
+          });
+          const marker = new google.maps.Marker({
+            position: tokyo,
+            map,
+            title: "tokyo",
+          });
+
+          marker.addListener("click", () => {
+            console.log("marker click")
+            infowindow.open({
+              anchor: marker,
+              map,
+              shouldFocus: false,
+            });
+          });
+          // infoWindow.addListener('closeclick', ()=>{
+          //   console.log("closeclick")
+          //   // Handle focus manually.
+          // });
+        }
+
+        window.initInfoMap = initInfoMap;
+      </script>
+    </section>
+    <style>
+      #map,
+      .map {
+        height: 300px;
+      }
+    </style>
+  </section>
+</body>
+</html>
