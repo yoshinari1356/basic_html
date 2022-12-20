@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Drag-and-Drop Example</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="example-parent">
+      <div class="example-origin">
+        <div
+          id="draggable-1"
+          class="example-draggable"
+          draggable="true"
+          ondragstart="onDragStart(event, 'all');"
+        >
+          draggable all
+        </div>
+        <div
+          id="draggable-1"
+          class="example-draggable"
+          draggable="true"
+          ondragstart="onDragStart(event, 'move');"
+        >
+          draggable move
+        </div>
+        <div
+          id="draggable-2"
+          class="example-draggable"
+          draggable="true"
+          ondragstart="onDragStart(event, 'copy');"
+        >
+          draggable copy
+        </div>
+        <div
+          id="draggable-3"
+          class="example-draggable"
+          draggable="true"
+          ondragstart="onDragStart(event, 'copyMove');"
+        >
+          draggable copyMove
+        </div>
+        <div
+          id="draggable-3"
+          class="example-draggable"
+          draggable="true"
+          ondragstart="onDragStart(event, 'link');"
+        >
+          draggable link
+        </div>
+      </div>
+
+      <div
+        class="example-dropzone"
+        ondragover="onDragOver(event);"
+        ondrop="onDrop(event);"
+      >
+        dropzone
+      </div>
+      <div
+        class="example-dropzone"
+        ondragover="onDragOver(event);"
+        ondrop="onDrop(event);"
+      >
+        dropzone
+      </div>
+      <div
+        class="example-dropzone"
+        ondragover="onDragOver(event);"
+        ondrop="onDrop(event);"
+      >
+        dropzone
+      </div>
+      <div
+        class="example-dropzone"
+        ondragover="onDragOver(event);"
+        ondrop="onDrop(event);"
+      >
+        dropzone
+      </div>
+    </div>
+    <script>
+      function onDragStart(event, effectAllowed) {
+        // console.log("onDragStart", effectAllowed)
+        // ブラウザでドラッグ操作をした際に許可される効果を指定する
+        // https://developer.mozilla.org/ja/docs/Web/API/DataTransfer/effectAllowed
+        event.dataTransfer.effectAllowed = effectAllowed;
+        event.dataTransfer.setData('text/plain', event.target.id);
+      }
+      function onDragOver(event) {
+        console.log("onDragOver")
+        event.preventDefault();
+      }
+      function onDrop(event) {
+        console.log("onDrop")
+        const id = event
+          .dataTransfer
+          .getData('text');
+        const draggableElement = document.getElementById(id);
+        const dropzone = event.target;
+        dropzone.appendChild(draggableElement);
+        event
+          .dataTransfer
+          .clearData();
+      }
+    </script>
+    <style>
+      .example-parent {
+        border: 2px solid #DFA612;
+        color: black;
+        display: flex;
+        font-family: sans-serif;
+        font-weight: bold;
+      }
+
+      .example-origin {
+        flex-basis: 100%;
+        flex-grow: 1;
+        padding: 10px;
+      }
+
+      .example-draggable {
+        background-color: #4AAE9B;
+        font-weight: normal;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        padding: 10px;
+      }
+
+      .example-dropzone {
+        background-color: #6DB65B;
+        flex-basis: 100%;
+        flex-grow: 1;
+        padding: 10px;
+      }
+    </style>
+  </body>
+</html>
