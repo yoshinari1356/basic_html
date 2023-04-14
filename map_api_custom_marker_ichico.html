@@ -8,7 +8,7 @@
 </head>
 <body>
   <h1>ICHICOを使えるお店</h1>
-  <p>2023/4/5現在の情報。以下のサイトの画像の一覧から自動でテキスト化してるので、間違いがある可能性があります。責任は持てません</p>
+  <p>2023/4/14現在の情報。以下のサイトの画像の一覧から自動でテキスト化してるので、間違いがある可能性があります。責任は持てません</p>
   <a href="https://www.city.ichikawa.lg.jp/eco05/0000424980.html">https://www.city.ichikawa.lg.jp/eco05/0000424980.html</a>
   <section>
     <div id="custom_marker_map" class="map"></div>
@@ -38,26 +38,152 @@
           },
         };
         const features = [
-          {type:"飲食",title:"AsianHeat",address:"八幡2ー14-12北ロ横丁ヒ丿レ1-A",position:{lat: 35.7214699, lng: 139.9278599}},{type:"飲食",title:"居酒屋えり",address:"南八幡3-7-11山崎荘102",position:{lat: 35.7188631, lng: 139.9279028}},{type:"飲食",title:"居酒屋こい",address:"南八幡3-7-1",position:{lat: 35.7197827, lng: 139.9279418}},{type:"飲食",title:"izakaya上喜源",address:"八幡2-16-21ウ工ストヒルIF",position:{lat: 35.7219405, lng: 139.9266986}},{type:"飲食",title:"居酒屋美",address:"南八幡3-7-16",position:{lat: 35.7191146, lng: 139.9276169}},{type:"飲食",title:"うえだ別館",address:"八幡2-7-6",position:{lat: 35.7215526, lng: 139.9290681}},{type:"飲食",title:"エレファントカレー&スパイス",address:"南八幡3-8-9 SAP本八幡1階",position:{lat: 35.718721, lng: 139.9282603}},{type:"飲食",title:"おいもや壺",address:"南八幡3-8-13シャトーデザー丿レクボタ102",position:{lat: 35.7189888, lng: 139.9284039}},{type:"飲食",title:"カイジェラート",address:"八幡5ー1-26",position:{lat: 35.7223726, lng: 139.9311204}},{type:"飲食",title:"シェ・スギノ",address:"南八幡3-8-13シャトーデサー丿レクボタ104",position:{lat: 35.7189888, lng: 139.9284039}},{type:"飲食",title:"しゃぶしゃぶ温野菜 本八幡店",address:"八幡2-15-10 (バティオ本八幡)",position:{lat: 35.7213241, lng: 139.9275016}},{type:"飲食",title:"寿司バル八幡BASE",address:"南八幡5-7-12丿レミエー丿レIF",position:{lat: 35.7212054, lng: 139.9226946}},{type:"飲食",title:"鮨まさひろ",address:"八幡2-6-5",position:{lat: 35.72170140000001, lng: 139.9282603}},{type:"飲食",title:"Stylish Bar Groovy",address:"八幡2-14-16",position:{lat: 35.7215515, lng: 139.9281955}},{type:"飲食",title:"炭火焼肉きっちょう本八幡店",address:"南八幡5-1-4 2田中ヒルIF",position:{lat: 35.721238, lng: 139.9252972}},{type:"飲食",title:"o秒レモンサワーときわ亭本八幡店",address:"八幡2-15-10 (バティオ本八幡)",position:{lat: 35.7213241, lng: 139.9275016}},{type:"飲食",title:"タケ丼丸市川苜野店",address:"苜野2ー14-14グリーンコーボ107",position:{lat: 35.7135721, lng: 139.9279808}},{type:"飲食",title:"ドトー丿レコーヒーショップ本八幡南ロ店",address:"南八幡4-1-13",position:{lat: 35.7206455, lng: 139.9273343}},{type:"飲食",title:"バデラトウーラ",address:"鬼高1-13-13",position:{lat: 35.7114077, lng: 139.9334261}},{type:"飲食",title:"ペタ丿レチキン本八幡店",address:"南八幡3-6-11大島ヒルIF",position:{lat: 35.719069, lng: 139.9273093}},{type:"飲食",title:"マリノステリア本八幡店",address:"八幡2-12-5",position:{lat: 35.721118, lng: 139.928891}},{type:"飲食",title:"MINT BLUE",address:"東苜野1-2-13-102",position:{lat: 35.7135721, lng: 139.9279808}},{type:"飲食",title:"モスパーガー本八幡南ロ店",address:"南八幡4-8-11",position:{lat: 35.7191276, lng: 139.9262181}},{type:"飲食",title:"ュアカレー",address:"八幡3 -14-3シロワヒル101",position:{lat: 35.7233457, lng: 139.9250712}},{type:"飲食",title:"ら一めん木尾田",address:"八幡2-12-8",position:{lat: 35.7212028, lng: 139.9291305}},{type:"飲食",title:"Light Dish",address:"八幡2-13-16しなだや102",position:{lat: 35.7215109, lng: 139.9283904}},{type:"飲食",title:"wine cafe Pub Jack本八幡店",address:"南八幡4-4-14東洋マンション1階",position:{lat: 35.7200729, lng: 139.9248968}},{type:"飲食",title:"和食さと市川苜野店",address:"平田1-9-7",position:{lat: 35.7248935, lng: 139.9219939}},{type:"飲食",title:"和食波奈",address:"鬼高1-1-1 (ニッケコルトンプラザ)",position:{lat: 35.7165373, lng: 139.9344873}},{type:"物販",title:"acoustic world",address:"八幡4-6-8",position:{lat: 35.7266349, lng: 139.9296018}},{type:"物販",title:"いちかわのほほん古本市実行委員会",address:"平田3-5-2-215",position:{lat: 35.72090379999999, lng: 139.9213533}},{type:"物販",title:"ウ工ダ文具",address:"八幡2-12-10",position:{lat: 35.7210034, lng: 139.928941}},{type:"物販",title:"工フスタイル",address:"南八幡1-22-5花沢マンションIF",position:{lat: 35.715487, lng: 139.9304276}},{type:"物販",title:"猿松",address:"八幡4-18-26",position:{lat: 35.7266827, lng: 139.9333354}},{type:"物販",title:"オーケー本八幡店",address:"八幡3-6-1",position:{lat: 35.72217759999999, lng: 139.9257176}},{type:"物販",title:"株式会社小林種苗本店",address:"八幡1-10-5",position:{lat: 35.7194589, lng: 139.9337098}},{type:"物販",title:"くまざわ書店本八幡店",address:"八幡2-17-1本八幡シャボー2F",position:{lat: 35.7211516, lng: 139.9268001}},{type:"物販",title:"genpoodo",address:"八幡2-15-10 (バティオ本八幡)",position:{lat: 35.7213241, lng: 139.9275016}},{type:"物販",title:"弘武堂市川店",address:"東苜野1-1-6",position:{lat: 35.7729519, lng: 140.2926667}},{type:"物販",title:"じもとの放送局",address:"南八幡3 -10-14",position:{lat: 35.7182983, lng: 139.9292733}},{type:"物販",title:"トイザらスベビーザらス市川店",address:"鬼高1-1-1 (二ッケコ丿レトンプラザ)",position:{lat: 35.7174031, lng: 139.9332859}},{type:"物販",title:"東京ラスク本八幡店",address:"南八幡4-1-13",position:{lat: 35.7206455, lng: 139.9273343}},{type:"物販",title:"ときわ書房本八幡スクエア店",address:"八幡3-4-1アクス本八幡ビルIF",position:{lat: 35.7236251, lng: 139.9268488}},{type:"物販",title:"ナカセ薬局",address:"八幡3-20 2",position:{lat: 35.7252439, lng: 139.927059}},{type:"物販",title:"二トリ市川コルトンプラザ店",address:"鬼高1-1-1 (二ッケコ丿レトンプラザ)",position:{lat: 35.7174031, lng: 139.9332859}},{type:"物販",title:"バティスリーラバージュ",address:"八幡3-29-16 YS premiere IF",position:{lat: 35.7266244, lng: 139.929262}},{type:"物販",title:"はんこ屋さん2 1本八幡店",address:"八幡3-4-10ユーハイツA 1",position:{lat: 35.7231781, lng: 139.9257755}},{type:"物販",title:"ふくろう画廊",address:"苜野1-23-25",position:{lat: 35.7135721, lng: 139.9279808}},{type:"物販",title:"Boutique HANAYA",address:"八幡2-4-9カンティビ丿レ1 F",position:{lat: 35.7226581, lng: 139.9280184}},{type:"物販",title:"bloom",address:"八幡2-7 7",position:{lat: 35.72150690000001, lng: 139.9288619}},{type:"物販",title:"Hair Chic",address:"南八幡3 - 5-8",position:{lat: 35.71999050000001, lng: 139.9278757}},{type:"物販",title:"平和堂",address:"八幡3-21-28",position:{lat: 35.7258015, lng: 139.9271291}},{type:"物販",title:"ベスト補聴器センター",address:"八幡1-16-2フェリーチェ本八幡101",position:{lat: 35.7212251, lng: 139.9308031}},{type:"物販",title:"三谷牛肉店",address:"八幡3-25-15アーバン本八幡IF",position:{lat: 35.7251991, lng: 139.9273293}},{type:"物販",title:"メガネドラッグ本八幡駅前店",address:"八幡2-6-12",position:{lat: 35.72204800000001, lng: 139.9275969}},{type:"物販",title:"萌季屋",address:"八幡2- 7-11",position:{lat: 35.7216184, lng: 139.9284682}},{type:"物販",title:"ヤマタデンキテックランドNew市川本八幡店",address:"八幡3-3-3",position:{lat: 35.7234129, lng: 139.9271625}},{type:"物販",title:"有隣堂二ッケコ丿レトンプラザ店",address:"鬼高1-1-1 (二ッケコ丿レトンプラザ)",position:{lat: 35.7174031, lng: 139.9332859}},{type:"物販",title:"ユ二クロ市川コルトンプラザ店",address:"鬼高1-1-1 (二ッケコ丿レトンプラザ)",position:{lat: 35.7174031, lng: 139.9332859}},{type:"物販",title:"Raison detre本八幡",address:"南八幡5 -2-18",position:{lat: 35.7217565, lng: 139.9246165}},{type:"サービス",title:"ゴー丿レドジム本八幡千葉",address:"八幡2-15-10 (バティオ本八幡)",position:{lat: 35.7213241, lng: 139.9275016}},{type:"サービス",title:"Sunstone",address:"八幡4-5-6",position:{lat: 35.7245485, lng: 139.9291419}},{type:"サービス",title:"DOGGY STYLE",address:"東苜野1-28ー11",position:{lat: 35.7135721, lng: 139.9279808}},{type:"サービス",title:"ネイ丿レサロン丿レウィア",address:"八幡2-16-7",position:{lat: 35.7215055, lng: 139.9264184}},{type:"サービス",title:"BarBerShop1Q3",address:"南八幡5-3-2 IF",position:{lat: 35.7220067, lng: 139.9243663}},{type:"サービス",title:"Hathor (ハトル)",address:"八幡2-15-10 (バティオ本八幡)",position:{lat: 35.7213241, lng: 139.9275016}},{type:"サービス",title:"フォトスタジオMysig",address:"平田3-4-1バテンザⅢ 101",position:{lat: 35.7217636, lng: 139.9215735}},{type:"サービス",title:"Hair Chic",address:"南八幡3 - 5-8",position:{lat: 35.71999050000001, lng: 139.9278757}},{type:"サービス",title:"ヘアメイクバーソンズ",address:"八幡2-15-10 (バティオ本八幡)",position:{lat: 35.7213241, lng: 139.9275016}},{type:"サービス",title:"hair&make blanc",address:"南八幡4-7-8大イ申ビルIF",position:{lat: 35.7193551, lng: 139.9266986}},{type:"サービス",title:"本八幡駅前整体院",address:"南八幡5-1-2本八幡駅前ビル801",position:{lat: 35.7214693, lng: 139.9254208}},{type:"サービス",title:"本八幡スターレーン",address:"南八幡4-9-1東部ビル6F",position:{lat: 35.7193051, lng: 139.9257176}},{type:"サービス",title:"Laffy nail&deco works",address:"南八幡5 -2-19コーボ渡部IF",position:{lat: 35.7219071, lng: 139.9245665}},{type:"サービス",title:"リアット!",address:"八幡2-15-10 (バティオ本八幡)",position:{lat: 35.7213241, lng: 139.9275016}}
+           {type: "飲食",title: "秋田料理と炙りまるみや",address: "市川市南八幡5-3-20",position: {lat: 35.7221503, lng: 139.9240059}}
+          ,{type: "飲食",title: "AsianHeat(アジアンヒート)",address: "市川市八幡2-14-12北ロ横丁ビル1-A",position: {lat: 35.7214699, lng: 139.9278599}}
+          ,{type: "飲食",title: "居酒屋えり",address: "市川市南八幡3-7-11山崎荘102",position: {lat: 35.7188631, lng: 139.9279028}}
+          ,{type: "飲食",title: "居酒屋こい",address: "市川市南八幡3-7-1",position: {lat: 35.7197827, lng: 139.9279418}}
+          ,{type: "飲食",title: "izakaya上喜源",address: "市川市八幡2-16-21ウ工ストビル1F",position: {lat: 35.7219405, lng: 139.9266986}}
+          ,{type: "飲食",title: "居酒屋美",address: "市川市南八幡3-7-16",position: {lat: 35.7191146, lng: 139.9276169}}
+          ,{type: "飲食",title: "イタリアンダイニングカフェ八一レーノ(ーク",address: "市川市南八幡4-1-5八光堂別館ビル2F",position: {lat: 35.7202968, lng: 139.9272592}}
+          ,{type: "飲食",title: "入船寿司",address: "市川市南八幡3-3-7内宮シティハイツ101",position: {lat: 35.7197274, lng: 139.9289793}}
+          ,{type: "飲食",title: "うえだ別館",address: "市川市八幡2-7-6",position: {lat: 35.7215526, lng: 139.9290681}}
+          ,{type: "飲食",title: "エレファント カレー&スパイス",address: "市川市南八幡3-8-9 SAP本八幡1F",position: {lat: 35.718721, lng: 139.9282603}}
+          ,{type: "飲食",title: "おいもや壺",address: "市川市南八幡3-8-13シャトーデザールクボタ102",position: {lat: 35.7189888, lng: 139.9284039}}
+          ,{type: "飲食",title: "黄金の華",address: "市川市鬼高1-1-1",position: {lat: 35.7165373, lng: 139.9344873}}
+          ,{type: "飲食",title: "カイジェラート",address: "市川市八幡5-1-26",position: {lat: 35.7223726, lng: 139.9311204}}
+          ,{type: "飲食",title: "カイリ",address: "市川市南八幡3-4-15戸佐ビル1F",position: {lat: 35.7202981, lng: 139.9284105}}
+          ,{type: "飲食",title: "Cafe&BarYY",address: "市川市南八幡5-1-3クリーンターフ駅前ビル2F",position: {lat: 35.7213417, lng: 139.9253773}}
+          ,{type: "飲食",title: "cafeレストランいつものところ",address: "市川市南八幡4-8-9ニューグリーンビル202",position: {lat: 35.7188842, lng: 139.926058}}
+          ,{type: "飲食",title: "菜福椄135餃子酒場",address: "市川市南八幡4-3-2丸玉ビルBI",position: {lat: 35.7211275, lng: 139.9263483}}
+          ,{type: "飲食",title: "シェ・スギノ",address: "市川市南八幡3-8-13 シャトーデザールクボタ104",position: {lat: 35.7189888, lng: 139.9284039}}
+          ,{type: "飲食",title: "しゃぶしゃぶ温野菜 本八幡店",address: "市川市八幡2-15-10（パティオ本八幡）",position: {lat: 35.7213241, lng: 139.9275016}}
+          ,{type: "飲食",title: "寿司バル八幡BASE",address: "市川市南八幡5-7-12 ルミエール1F",position: {lat: 35.7212054, lng: 139.9226946}}
+          ,{type: "飲食",title: "鮨まさひろ",address: "市川市八幡2-6-5",position: {lat: 35.7217014, lng: 139.9282603}}
+          ,{type: "飲食",title: "Stylish Bar Groovy",address: "市川市八幡2-14-16",position: {lat: 35.7215515, lng: 139.9281955}}
+          ,{type: "飲食",title: "炭火焼肉きっちょう",address: "市川市南八幡5-1-4田中ビル1F",position: {lat: 35.721238, lng: 139.9252972}}
+          ,{type: "飲食",title: "o秒レモンサワーときわ亭本八幡店",address: "市川市八幡2-15-10（パティオ本八幡）",position: {lat: 35.7213241, lng: 139.9275016}}
+          ,{type: "飲食",title: "タケ丼丸 市川菅野店",address: "市川市菅野2-14-14グリーンコーポ107",position: {lat: 35.7297387, lng: 139.9229348}}
+          ,{type: "飲食",title: "卵と私ニッケコルトンプラザ店",address: "市川市鬼高1-1-1",position: {lat: 35.7165373, lng: 139.9344873}}
+          ,{type: "飲食",title: "タルタル八ンバーグの店牛忠ニッケコルトンプラサ店",address: "市川市鬼高1-1-1",position: {lat: 35.7165373, lng: 139.9344873}}
+          ,{type: "飲食",title: "ドトールコーヒーショップ本八幡南ロ店",address: "市川市南八幡4-1ー13",position: {lat: 35.7206455, lng: 139.9273343}}
+          ,{type: "飲食",title: "なか川喇虱庵",address: "市川市八幡3-7-18",position: {lat: 35.7224349, lng: 139.9254173}}
+          ,{type: "飲食",title: "八デラトウーラ",address: "市川市鬼高1-13-13",position: {lat: 35.7114077, lng: 139.9334261}}
+          ,{type: "飲食",title: "Vishamonte",address: "市川市南八幡3-7ー5山喜マンション1F",position: {lat: 35.7196156, lng: 139.928356}}
+          ,{type: "飲食",title: "ペダルチキン本八幡店",address: "市川市南八幡3-6ー11 大島ビル1F",position: {lat: 35.719069, lng: 139.9273093}}
+          ,{type: "飲食",title: "マリノステリア本八幡店",address: "市川市八幡2-12-5",position: {lat: 35.721118, lng: 139.928891}}
+          ,{type: "飲食",title: "MINT BLUE",address: "市川市東菅野1-2ー13 102",position: {lat: 35.7267675, lng: 139.9289834}}
+          ,{type: "飲食",title: "モスパーカー本八幡南ロ店",address: "市川市南八幡4-8ー11",position: {lat: 35.7191276, lng: 139.9262181}}
+          ,{type: "飲食",title: "Yajikko kitchen",address: "市川市南八幡1-1ー17",position: {lat: 35.7191076, lng: 139.9305806}}
+          ,{type: "飲食",title: "ュアカレー",address: "市川市八幡3-14-3シロワビル101",position: {lat: 35.7233457, lng: 139.9250712}}
+          ,{type: "飲食",title: "洋麺屋五右衛門 ニッケコルトンプラザ店",address: "市川市鬼高1-1-1",position: {lat: 35.7165373, lng: 139.9344873}}
+          ,{type: "飲食",title: "ら一めん木尾田",address: "市川市八幡2-12-8",position: {lat: 35.7212028, lng: 139.9291305}}
+          ,{type: "飲食",title: "Light Dish",address: "市川市八幡2-13-16しなだや102",position: {lat: 35.7215109, lng: 139.9283904}}
+          ,{type: "飲食",title: "レストラン停車場",address: "市川市八幡2-7-11",position: {lat: 35.7216184, lng: 139.9284682}}
+          ,{type: "飲食",title: "wine cafe Pub」ack本八幡店",address: "市川市南八幡4-4-14東洋マンション1F",position: {lat: 35.7200729, lng: 139.9248968}}
+          ,{type: "飲食",title: "和食さと市川百野店",address: "市川市平田1-9-7",position: {lat: 35.7248935, lng: 139.9219939}}
+          ,{type: "飲食",title: "和食波奈ニッケコ丿レトンプラザ店",address: "市川市鬼高1-1-1",position: {lat: 35.7165373, lng: 139.9344873}}
+          ,{type: "物販",title: "acoustic world",address: "市川市八幡4-6-8",position: {lat: 35.7266349, lng: 139.9296018}}
+          ,{type: "物販",title: "いちかわのほほん古本市実行委員会",address: "市川市平田3-5-2-215",position: {lat: 35.7209037999999, lng: 139.9213533}}
+          ,{type: "物販",title: "ウ工ダ文具",address: "市川市八幡2-12-10",position: {lat: 35.7210034, lng: 139.928941}}
+          ,{type: "物販",title: "工フスタイル",address: "市川市南八幡1-22-5花沢マンション1F",position: {lat: 35.715487, lng: 139.9304276}}
+          ,{type: "物販",title: "猿松",address: "市川市八幡4-18-26",position: {lat: 35.7266827, lng: 139.9333354}}
+          ,{type: "物販",title: "オーケー本八幡店",address: "市川市八幡3-6-1",position: {lat: 35.7221775999999, lng: 139.9257176}}
+          ,{type: "物販",title: "株式会社小オ料重苗本店",address: "市川市八幡1-10-5",position: {lat: 35.7194589, lng: 139.9337098}}
+          ,{type: "物販",title: "くまさわ書店本八幡店",address: "市川市八幡2-17-1(シャポー本八幡)",position: {lat: 35.7211516, lng: 139.9268001}}
+          ,{type: "物販",title: "genpoodo",address: "市川市八幡2-15-10(バティオ本八幡)",position: {lat: 35.7213241, lng: 139.9275016}}
+          ,{type: "物販",title: "弘武堂 市川店",address: "市川市東菅野1-1-6",position: {lat: 35.7271793, lng: 139.9297417}}
+          ,{type: "物販",title: "The O.C",address: "市川市南八幡4-17-19 1F",position: {lat: 35.7175045, lng: 139.9248267}}
+          ,{type: "物販",title: "しもとの放送局",address: "市川市南八幡3-10-14",position: {lat: 35.7182983, lng: 139.9292733}}
+          ,{type: "物販",title: "トイサらスペヒーザらス市川店",address: "市川市鬼高1-1-1",position: {lat: 35.7165373, lng: 139.9344873}}
+          ,{type: "物販",title: "東京ラスク本八幡店",address: "市川市南八幡4-ト13",position: {lat: 35.7194088, lng: 139.9257977}}
+          ,{type: "物販",title: "ときわ書房本八幡スクエア店",address: "市川市八幡3-4-1アクス本八幡ビル1F",position: {lat: 35.7236251, lng: 139.9268488}}
+          ,{type: "物販",title: "ナガセ薬局",address: "市川市八幡3-20-2",position: {lat: 35.7252439, lng: 139.927059}}
+          ,{type: "物販",title: "ニトリ市川コルトンプラザ店",address: "市川市鬼高1-1-1",position: {lat: 35.7165373, lng: 139.9344873}}
+          ,{type: "物販",title: "バティスリーラバージュ",address: "市川市八幡3-29-16 y's premiere 1F",position: {lat: 35.7266244, lng: 139.929262}}
+          ,{type: "物販",title: "はんこ屋さん2 1本八幡店",address: "市川市八幡3-4-10ユーハイツAl",position: {lat: 35.7231781, lng: 139.9257755}}
+          ,{type: "物販",title: "ふくろう画廊",address: "市川市菅野1-23-25",position: {lat: 35.7297505, lng: 139.9259499}}
+          ,{type: "物販",title: "Boutique HANAYA",address: "市川市八幡2-4-9カンティビル1 F",position: {lat: 35.7226581, lng: 139.9280184}}
+          ,{type: "物販",title: "bloom",address: "市川市八幡2-7-7",position: {lat: 35.7215069, lng: 139.9288619}}
+          ,{type: "物販",title: "Hair Chic",address: "市川市南八幡3-5-8",position: {lat: 35.7199905, lng: 139.9278757}}
+          ,{type: "物販",title: "平和堂",address: "市川市八幡3-21-28",position: {lat: 35.7258015, lng: 139.9271291}}
+          ,{type: "物販",title: "ベス日甫聴器センター",address: "市川市八幡1-16-2フェリーチェ本八幡101",position: {lat: 35.7212251, lng: 139.9308031}}
+          ,{type: "物販",title: "三谷牛肉店",address: "市川市八幡3-25-15アーバン本八幡1F",position: {lat: 35.7251991, lng: 139.9273293}}
+          ,{type: "物販",title: "メガネドラッグ本八幡駅前店",address: "市川市八幡2-6-12",position: {lat: 35.722048, lng: 139.9275969}}
+          ,{type: "物販",title: "萌季屋",address: "市川市八幡2-7-11",position: {lat: 35.7216184, lng: 139.9284682}}
+          ,{type: "物販",title: "ヤマダデンキテックランドNew市川本八幡店",address: "市川市八幡3-3-3",position: {lat: 35.7234129, lng: 139.9271625}}
+          ,{type: "物販",title: "有隣堂ニッケコルトンプラザ店",address: "市川市鬼高1-1-1",position: {lat: 35.7165373, lng: 139.9344873}}
+          ,{type: "物販",title: "ユニクロ市川コルトンプラザ店",address: "市川市鬼高1-1-1",position: {lat: 35.7165373, lng: 139.9344873}}
+          ,{type: "物販",title: "リアット!バティオ本八幡店",address: "市川市八幡2-15-10(バティオ本八幡)",position: {lat: 35.7213241, lng: 139.9275016}}
+          ,{type: "物販",title: "リサイクルプティックミズ",address: "市川市八幡2-7-6",position: {lat: 35.7215526, lng: 139.9290681}}
+          ,{type: "物販",title: "Raison d'etre 本八幡",address: "市川市南八幡5-2-18",position: {lat: 35.7217565, lng: 139.9246165}}
+          ,{type: "サービス",title: "市川八燔長生館",address: "市川市八幡3-9-1工スペランザ106",position: {lat: 35.7227402, lng: 139.9247556}}
+          ,{type: "サービス",title: "ゴールドジム本八幡千葉",address: "市川市八幡2-15-10(バティオ本八幡)",position: {lat: 35.7213241, lng: 139.9275016}}
+          ,{type: "サービス",title: "Sunstore",address: "市川市八幡4-5-6",position: {lat: 35.7245485, lng: 139.9291419}}
+          ,{type: "サービス",title: "DOGGY STYLE",address: "市川市東菅野1-28-11",position: {lat: 35.7283379, lng: 139.9338321}}
+          ,{type: "サービス",title: "ネイルサロンルウィア",address: "市川市八幡2-16-7",position: {lat: 35.7215055, lng: 139.9264184}}
+          ,{type: "サービス",title: "BarBerShopIQ3",address: "市川市南八幡5-3-2",position: {lat: 35.7220067, lng: 139.9243663}}
+          ,{type: "サービス",title: "hathor the beauty",address: "市川市八幡2-15-10(バティオ本八幡)",position: {lat: 35.7213241, lng: 139.9275016}}
+          ,{type: "サービス",title: "フォトスタジオMysig",address: "市川市平田3-4-1バテンザⅢ 101",position: {lat: 35.7217636, lng: 139.9215735}}
+          ,{type: "サービス",title: "Hair Chic",address: "市川市南八幡3-5-8",position: {lat: 35.7199905, lng: 139.9278757}}
+          ,{type: "サービス",title: "ヘアメイクバーソンズ",address: "市川市八幡2-15-10(バティオ本八幡)",position: {lat: 35.7213241, lng: 139.9275016}}
+          ,{type: "サービス",title: "hair&make blanc",address: "市川市南八幡4-7-8大伸ビルIF",position: {lat: 35.7193551, lng: 139.9266986}}
+          ,{type: "サービス",title: "みんなの脱毛TSU RURIN",address: "市川市南八幡4-5-20クローバービル302",position: {lat: 35.7206961, lng: 139.9257378}}
+          ,{type: "サービス",title: "本八繙駅前整体院",address: "市川市南八幡5-1-2本八幡駅前ビル801",position: {lat: 35.7214693, lng: 139.9254208}}
+          ,{type: "サービス",title: "本八幡スターレーン",address: "市川市南八幡4-9-1東部ビル6F",position: {lat: 35.7193051, lng: 139.9257176}}
+          ,{type: "サービス",title: "ライトビューティー本八幡店",address: "市川市南八幡4-6-9アロー本八幡駅前ビル22番館302",position: {lat: 35.7196236, lng: 139.926103}}
+          ,{type: "サービス",title: "Laffy nail&deco works",address: "市川市南八幡5-2-19コーポ渡部IF",position: {lat: 35.7219071, lng: 139.9245665}}
         ];
+
+        // Group markers with the same position.
+        const markerGroups = features.reduce((groups, feature) => {
+          const key = `${feature.position.lat},${feature.position.lng}`;
+          if (!groups[key]) {
+            groups[key] = [];
+          }
+          groups[key].push(feature);
+          return groups;
+        }, {});
+
         let infowindows = []
 
-        // Create markers.
-        for (let i = 0; i < features.length; i++) {
-          const marker = new google.maps.Marker({
-            position: features[i].position,
-            icon: icons[features[i].type].icon,
-            map: map,
-          });
+        // Create markers and infowindows.
+        for (const groupKey in markerGroups) {
+          const group = markerGroups[groupKey];
+          let contentString;
+          if (group.length === 1) {
+            contentString =
+              '<div id="infowindow">' +
+              '<div id="bodyContent">' +
+              `<h4>${group[0].title}</h4>` +
+              `<div>${group[0].address}</div>` +
+              `<div>${group[0].type}</div>` +
+              "</div>" +
+              "</div>";
+          } else {
+            contentString = '<div id="infowindow"><ul>';
+            group.forEach((feature) => {
+              contentString += `<li><h4>${feature.title}</h4><div>${feature.address}</div><div>${feature.type}</div></li>`;
+            });
+            contentString += '</ul></div>';
+          }
+          const icon = {
+            url: icons[group[0].type].icon,
+            labelOrigin: new google.maps.Point(15, -10),
+            size: new google.maps.Size(30, 30),
+            anchor: new google.maps.Point(15, 15),
+          };
 
-          const contentString =
-            '<div id="content">' +
-            '<div id="bodyContent">' +
-            `<h4>${features[i].title}</h4>` +
-            `<div>${features[i].address}</div>` +
-            `<div>${features[i].type}</div>` +
-            "</div>" +
-            "</div>";
+          const marker = new google.maps.Marker({
+            position: group[0].position,
+            icon: icons[group[0].type].icon,
+            map: map,
+            label: {
+              text: `${group.length}`,
+              color: "#FFFFFF",
+              fontWeight: "bold",
+              fontSize: "12px",
+            },
+          });
 
           const infowindow = new google.maps.InfoWindow({
             content: contentString,
@@ -90,7 +216,16 @@
       height: 85vh;
     }
     .map h4 {
-      margin-top: 0
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    #infowindow ul{
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-top: 0;
+      margin-bottom: 0;
     }
   </style>
 </body>
