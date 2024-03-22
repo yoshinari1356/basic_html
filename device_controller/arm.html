@@ -1,0 +1,106 @@
+<html lang="ja">
+
+<head>
+  <meta http-equiv="refresh" content="5">
+  <meta charset="UTF-8">
+  <title>Arm</title>
+</head>
+
+<body>
+  <h1>Arm Controller</h1>
+  <div class='controller'>
+    <b>つかむ</b>
+    <input type='range' name='angle0_rate' value="">
+    <b>手首上下</b>
+    <input type='range' name='angle1_rate' value="">
+    <b>手首左右</b>
+    <input type='range' name='angle2_rate' value="">
+    <br>
+    <b>腕上</b>
+    <input type='range' name='angle4_rate' value="">
+    <b>腕下</b>
+    <input type='range' name='angle5_rate' value="">
+    <b>腕回転</b>
+    <input type='range' name='angle6_rate' value="">
+  </div>
+  <style>
+    .controller {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+  </style>
+  <script>
+    // 要素を取得
+    const controller = document.querySelector('.controller');
+    const angle0_rate_elem = controller.querySelector("input[name='angle0_rate']")
+    const angle1_rate_elem = controller.querySelector("input[name='angle1_rate']")
+    const angle2_rate_elem = controller.querySelector("input[name='angle2_rate']")
+    const angle4_rate_elem = controller.querySelector("input[name='angle4_rate']")
+    const angle5_rate_elem = controller.querySelector("input[name='angle5_rate']")
+    const angle6_rate_elem = controller.querySelector("input[name='angle6_rate']")
+    // ローカルストレージから値を取得
+    let angle0_rate = localStorage.getItem("angle0_rate") || 90;
+    let angle1_rate = localStorage.getItem("angle1_rate") || 90;
+    let angle2_rate = localStorage.getItem("angle2_rate") || 90;
+    let angle4_rate = localStorage.getItem("angle4_rate") || 90;
+    let angle5_rate = localStorage.getItem("angle5_rate") || 90;
+    let angle6_rate = localStorage.getItem("angle6_rate") || 90;
+    // 要素にローカルストレージからの値をセット
+    angle0_rate_elem.value = angle0_rate;
+    angle1_rate_elem.value = angle1_rate;
+    angle2_rate_elem.value = angle2_rate;
+    angle4_rate_elem.value = angle4_rate;
+    angle5_rate_elem.value = angle5_rate;
+    angle6_rate_elem.value = angle6_rate;
+    controller.addEventListener('input', (e) => {
+      // 0.1秒間隔で送信する
+      if (controller.timer) {
+        clearTimeout(controller.timer);
+      }
+      controller.timer = setTimeout(() => {
+        localStorage.setItem("angle0_rate", 0)
+        angle0_rate = angle0_rate_elem.value;
+        angle1_rate = angle1_rate_elem.value;
+        angle2_rate = angle2_rate_elem.value;
+        angle4_rate = angle4_rate_elem.value;
+        angle5_rate = angle5_rate_elem.value;
+        angle6_rate = angle6_rate_elem.value;
+        localStorage.setItem("angle0_rate", angle0_rate);
+        localStorage.setItem("angle1_rate", angle1_rate);
+        localStorage.setItem("angle2_rate", angle2_rate);
+        localStorage.setItem("angle4_rate", angle4_rate);
+        localStorage.setItem("angle5_rate", angle5_rate);
+        localStorage.setItem("angle6_rate", angle6_rate);
+        const params = {
+          angle0: 180 * angle0_rate / 100,
+          angle1: 180 * angle1_rate / 100,
+          angle2: 180 * angle2_rate / 100,
+          angle4: 180 * angle4_rate / 100,
+          angle5: 180 * angle5_rate / 100,
+          angle6: 180 * angle6_rate / 100
+        };
+        const query = new URLSearchParams(params);
+
+        fetch(`http://192.168.10.232/angle?${query}`, {
+            method : "POST",
+            headers : {
+              "Content-Type" : "application/json"
+            },
+          })
+          .then(response => {
+            if (!response.ok) {
+              console.error('サーバーエラー');
+            }
+            response => response.json()
+          }).then(data => {
+            console.log(data);
+          }).catch(error => {
+            console.error('通信に失敗しました', error);
+          });
+      }, 10);
+    });
+  </script>
+</body>
+
+</html>
