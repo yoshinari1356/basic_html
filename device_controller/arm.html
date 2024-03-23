@@ -7,27 +7,94 @@
 </head>
 
 <body>
-  <h1>Arm Controller</h1>
-  <div class='controller'>
-    <b>つかむ</b>
-    <input type='range' name='angle0_rate' value="">
-    <b>手首上下</b>
-    <input type='range' name='angle1_rate' value="">
-    <b>手首左右</b>
-    <input type='range' name='angle2_rate' value="">
-    <br>
-    <b>腕上</b>
-    <input type='range' name='angle4_rate' value="">
-    <b>腕下</b>
-    <input type='range' name='angle5_rate' value="">
-    <b>腕回転</b>
-    <input type='range' name='angle6_rate' value="">
-  </div>
+  <section class="main-section">
+    <h1>Arm Controller</h1>
+    <div>
+      <button onclick="clickImportJson()">Import Json</button>
+    </div>
+    <div class='controller'>
+      <b>つかむ</b>
+      <input type='range' name='angle0_rate' value="">
+      <b>手首上下</b>
+      <input type='range' name='angle1_rate' value="">
+      <b>手首左右</b>
+      <input type='range' name='angle2_rate' value="">
+      <br>
+      <b>腕上</b>
+      <input type='range' name='angle4_rate' value="">
+      <b>腕下</b>
+      <input type='range' name='angle5_rate' value="">
+      <b>腕回転</b>
+      <input type='range' name='angle6_rate' value="">
+    </div>
+
+    <div class="snippet_controller">
+      <h2>Snippets</h2>
+      <div class="snippet-list">
+        <div class="snippet-item snippet1">
+          <div>
+            <div class="snippet_name"></div>
+            <div class="buttons">
+              <button onclick="clickSnippetSave('snippet1')">Save</button>
+              <button onclick="clickSnippetLoad('snippet1')">Load</button>
+              <button onclick="clickSnippetMove('snippet1')">Move</button>
+            </div>
+          </div>
+          <pre class="snippet_json"></pre>
+        </div>
+        <div class="snippet-item snippet2">
+          <div>
+            <div class="snippet_name"></div>
+            <div class="buttons">
+              <button onclick="clickSnippetSave('snippet2')">Save</button>
+              <button onclick="clickSnippetLoad('snippet2')">Load</button>
+              <button onclick="clickSnippetMove('snippet2')">Move</button>
+            </div>
+          </div>
+          <pre class="snippet_json"></pre>
+        </div>
+        <div class="snippet-item snippet3">
+          <div>
+            <div class="snippet_name"></div>
+            <div class="buttons">
+              <button onclick="clickSnippetSave('snippet3')">Save</button>
+              <button onclick="clickSnippetLoad('snippet3')">Load</button>
+              <button onclick="clickSnippetMove('snippet3')">Move</button>
+            </div>
+          </div>
+          <pre class="snippet_json"></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <style>
+    .main-section {
+      width: 80vw;
+      margin: 0 auto;
+    }
     .controller {
       display: grid;
       grid-template-columns: 1fr;
       gap: 10px;
+    }
+    .snippet-list {
+      display: grid;
+      grid-template-columns: 50% 50%;
+      gap: 10px;
+    }
+    .snippet-item .buttons {
+      display: flex;
+      gap: 10px;
+      float:right;
+    }
+    .snippet-item .snippet_name {
+      font-weight: bold;
+    }
+    .snippet-item .snippet_json {
+      word-break: break-all;
+      word-wrap: break-word;
+      white-space: pre-wrap;
     }
   </style>
   <script>
@@ -59,47 +126,186 @@
         clearTimeout(controller.timer);
       }
       controller.timer = setTimeout(() => {
-        localStorage.setItem("angle0_rate", 0)
-        angle0_rate = angle0_rate_elem.value;
-        angle1_rate = angle1_rate_elem.value;
-        angle2_rate = angle2_rate_elem.value;
-        angle4_rate = angle4_rate_elem.value;
-        angle5_rate = angle5_rate_elem.value;
-        angle6_rate = angle6_rate_elem.value;
-        localStorage.setItem("angle0_rate", angle0_rate);
-        localStorage.setItem("angle1_rate", angle1_rate);
-        localStorage.setItem("angle2_rate", angle2_rate);
-        localStorage.setItem("angle4_rate", angle4_rate);
-        localStorage.setItem("angle5_rate", angle5_rate);
-        localStorage.setItem("angle6_rate", angle6_rate);
-        const params = {
-          angle0: 180 * angle0_rate / 100,
-          angle1: 180 * angle1_rate / 100,
-          angle2: 180 * angle2_rate / 100,
-          angle4: 180 * angle4_rate / 100,
-          angle5: 180 * angle5_rate / 100,
-          angle6: 180 * angle6_rate / 100
-        };
-        const query = new URLSearchParams(params);
-
-        fetch(`http://192.168.10.232/angle?${query}`, {
-            method : "POST",
-            headers : {
-              "Content-Type" : "application/json"
-            },
-          })
-          .then(response => {
-            if (!response.ok) {
-              console.error('サーバーエラー');
-            }
-            response => response.json()
-          }).then(data => {
-            console.log(data);
-          }).catch(error => {
-            console.error('通信に失敗しました', error);
-          });
+        sendMoveArm();
       }, 10);
     });
+    class Snippet {
+      constructor(name, angle0_rate, angle1_rate, angle2_rate, angle4_rate, angle5_rate, angle6_rate) {
+        this.name = name;
+        this.angle0_rate = angle0_rate;
+        this.angle1_rate = angle1_rate;
+        this.angle2_rate = angle2_rate;
+        this.angle4_rate = angle4_rate;
+        this.angle5_rate = angle5_rate;
+        this.angle6_rate = angle6_rate;
+      }
+    }
+    const sendMoveArm = () => {
+      localStorage.setItem("angle0_rate", 0)
+      angle0_rate = angle0_rate_elem.value;
+      angle1_rate = angle1_rate_elem.value;
+      angle2_rate = angle2_rate_elem.value;
+      angle4_rate = angle4_rate_elem.value;
+      angle5_rate = angle5_rate_elem.value;
+      angle6_rate = angle6_rate_elem.value;
+      localStorage.setItem("angle0_rate", angle0_rate);
+      localStorage.setItem("angle1_rate", angle1_rate);
+      localStorage.setItem("angle2_rate", angle2_rate);
+      localStorage.setItem("angle4_rate", angle4_rate);
+      localStorage.setItem("angle5_rate", angle5_rate);
+      localStorage.setItem("angle6_rate", angle6_rate);
+      const params = {
+        angle0: 180 * angle0_rate / 100,
+        angle1: 180 * angle1_rate / 100,
+        angle2: 180 * angle2_rate / 100,
+        angle4: 180 * angle4_rate / 100,
+        angle5: 180 * angle5_rate / 100,
+        angle6: 180 * angle6_rate / 100
+      };
+      const query = new URLSearchParams(params);
+
+      fetch(`http://192.168.10.232/angle?${query}`, {
+          method : "POST",
+          headers : {
+            "Content-Type" : "application/json"
+          },
+        })
+        .then(response => {
+          if (!response.ok) {
+            console.error('サーバーエラー');
+          }
+          response => response.json()
+        }).then(data => {
+          console.log(data);
+        }).catch(error => {
+          console.error('通信に失敗しました', error);
+        });
+    }
+    let snippets = {};
+    const loadSnippets = () => {
+      snippets = {};
+      snippets["snippet1"] = JSON.parse(localStorage.getItem("snippet1"));
+      snippets["snippet2"] = JSON.parse(localStorage.getItem("snippet2"));
+      snippets["snippet3"] = JSON.parse(localStorage.getItem("snippet3"));
+
+      for (let [snippet_id, snippet] of Object.entries(snippets)) {
+        const snippet_elem = document.querySelector(`.${snippet_id} .snippet_name`);
+        snippet_elem.textContent = snippet.name;
+        if(!snippet) {
+          continue;
+        }
+        const snippet_json_elem = document.querySelector(`.${snippet_id} .snippet_json`);
+        snippet_json_elem.textContent = JSON.stringify(snippet);
+      };
+    }
+    const clickImportJson = () => {
+      const json = prompt("jsonを入力してください");
+      if (!json) {
+        return;
+      }
+      try {
+        JSON.parse(json);
+      } catch (e) {
+        alert("jsonとして解析できませんでした");
+        return;
+      }
+      const snippet = JSON.parse(json);
+      if(!snippet.angle0_rate) {
+        alert("jsonの形式が違います");
+        return;
+      }
+      angle0_rate = snippet.angle0_rate
+      angle1_rate = snippet.angle1_rate
+      angle2_rate = snippet.angle2_rate
+      angle4_rate = snippet.angle4_rate
+      angle5_rate = snippet.angle5_rate
+      angle6_rate = snippet.angle6_rate
+      angle0_rate_elem.value = angle0_rate;
+      angle1_rate_elem.value = angle1_rate;
+      angle2_rate_elem.value = angle2_rate;
+      angle4_rate_elem.value = angle4_rate;
+      angle5_rate_elem.value = angle5_rate;
+      angle6_rate_elem.value = angle6_rate;
+    }
+    const clickSnippetSave = (snippet_id) => {
+      // ダイアログで名前を入力させる
+      var name = prompt ( "保存する際の名前を入力してください" ) ;
+      if (name == null) {
+        return;
+      }
+      saveCurrentSetting(snippet_id, name);
+    }
+    const clickSnippetLoad = (snippet_id) => {
+      loadSnippetSetting(snippet_id);
+      saveCurrentSetting(snippet_id);
+      saveLocalStorage();
+      loadSnippets();
+    }
+    const clickSnippetMove = (snippet_id) => {
+      console.log("clickSnippetMove")
+      loadSnippetSetting(snippet_id);
+      saveLocalStorage();
+      loadSnippets();
+      sendMoveArm();
+    }
+    const saveCurrentSetting = (snippet_id, name) => {
+      console.log("saveCurrentSetting")
+      if (!name) {
+        name = snippets[snippet_id].name;
+        if (name == null) {
+          return;
+        }
+      }
+      snippet = new Snippet(
+        name,
+        angle0_rate,
+        angle1_rate,
+        angle2_rate,
+        angle4_rate,
+        angle5_rate,
+        angle6_rate
+      );
+      localStorage.setItem(snippet_id, JSON.stringify({
+        name: name,
+        angle0_rate: angle0_rate_elem.value,
+        angle1_rate: angle1_rate_elem.value,
+        angle2_rate: angle2_rate_elem.value,
+        angle4_rate: angle4_rate_elem.value,
+        angle5_rate: angle5_rate_elem.value,
+        angle6_rate: angle6_rate_elem.value
+      }));
+      snippets[snippet_id] = snippet;
+    }
+    const saveLocalStorage = () => {
+      console.log("saveLocalStorage")
+      localStorage.setItem("angle0_rate", angle0_rate);
+      localStorage.setItem("angle1_rate", angle1_rate);
+      localStorage.setItem("angle2_rate", angle2_rate);
+      localStorage.setItem("angle4_rate", angle4_rate);
+      localStorage.setItem("angle5_rate", angle5_rate);
+      localStorage.setItem("angle6_rate", angle6_rate);
+    }
+    const loadSnippetSetting = (snippet_id) => {
+      console.log("loadCurrentSetting")
+      const snippet = JSON.parse(localStorage.getItem(snippet_id));
+      if (!snippet) {
+        return;
+      }
+      console.log(snippet_id, snippet);
+      angle0_rate = snippet.angle0_rate
+      angle1_rate = snippet.angle1_rate
+      angle2_rate = snippet.angle2_rate
+      angle4_rate = snippet.angle4_rate
+      angle5_rate = snippet.angle5_rate
+      angle6_rate = snippet.angle6_rate
+      angle0_rate_elem.value = angle0_rate;
+      angle1_rate_elem.value = angle1_rate;
+      angle2_rate_elem.value = angle2_rate;
+      angle4_rate_elem.value = angle4_rate;
+      angle5_rate_elem.value = angle5_rate;
+      angle6_rate_elem.value = angle6_rate;
+    }
+    loadSnippets();
   </script>
 </body>
 
