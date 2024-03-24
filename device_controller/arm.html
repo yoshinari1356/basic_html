@@ -14,18 +14,18 @@
     </div>
     <div class='controller'>
       <b>つかむ</b>
-      <input type='range' name='angle0_rate' value="">
+      <input type='range' name='hand_rate' value="">
       <b>手首上下</b>
-      <input type='range' name='angle1_rate' value="">
+      <input type='range' name='wrist_ud_rate' value="">
       <b>手首左右</b>
-      <input type='range' name='angle2_rate' value="">
+      <input type='range' name='wrist_lr_rate' value="">
       <br>
       <b>腕上</b>
-      <input type='range' name='angle4_rate' value="">
+      <input type='range' name='arm_1_rate' value="">
       <b>腕下</b>
-      <input type='range' name='angle5_rate' value="">
+      <input type='range' name='arm_2_rate' value="">
       <b>腕回転</b>
-      <input type='range' name='angle6_rate' value="">
+      <input type='range' name='base_rate' value="">
     </div>
 
     <div class="snippet_controller">
@@ -100,26 +100,26 @@
   <script>
     // 要素を取得
     const controller = document.querySelector('.controller');
-    const angle0_rate_elem = controller.querySelector("input[name='angle0_rate']")
-    const angle1_rate_elem = controller.querySelector("input[name='angle1_rate']")
-    const angle2_rate_elem = controller.querySelector("input[name='angle2_rate']")
-    const angle4_rate_elem = controller.querySelector("input[name='angle4_rate']")
-    const angle5_rate_elem = controller.querySelector("input[name='angle5_rate']")
-    const angle6_rate_elem = controller.querySelector("input[name='angle6_rate']")
+    const hand_rate_elem = controller.querySelector("input[name='hand_rate']")
+    const wrist_ud_rate_elem = controller.querySelector("input[name='wrist_ud_rate']")
+    const wrist_lr_rate_elem = controller.querySelector("input[name='wrist_lr_rate']")
+    const arm_1_rate_elem = controller.querySelector("input[name='arm_1_rate']")
+    const arm_2_rate_elem = controller.querySelector("input[name='arm_2_rate']")
+    const base_rate_elem = controller.querySelector("input[name='base_rate']")
     // ローカルストレージから値を取得
-    let angle0_rate = localStorage.getItem("angle0_rate") || 90;
-    let angle1_rate = localStorage.getItem("angle1_rate") || 90;
-    let angle2_rate = localStorage.getItem("angle2_rate") || 90;
-    let angle4_rate = localStorage.getItem("angle4_rate") || 90;
-    let angle5_rate = localStorage.getItem("angle5_rate") || 90;
-    let angle6_rate = localStorage.getItem("angle6_rate") || 90;
+    let hand_rate = localStorage.getItem("hand_rate") || 90;
+    let wrist_ud_rate = localStorage.getItem("wrist_ud_rate") || 90;
+    let wrist_lr_rate = localStorage.getItem("wrist_lr_rate") || 90;
+    let arm_1_rate = localStorage.getItem("arm_1_rate") || 90;
+    let arm_2_rate = localStorage.getItem("arm_2_rate") || 90;
+    let base_rate = localStorage.getItem("base_rate") || 90;
     // 要素にローカルストレージからの値をセット
-    angle0_rate_elem.value = angle0_rate;
-    angle1_rate_elem.value = angle1_rate;
-    angle2_rate_elem.value = angle2_rate;
-    angle4_rate_elem.value = angle4_rate;
-    angle5_rate_elem.value = angle5_rate;
-    angle6_rate_elem.value = angle6_rate;
+    hand_rate_elem.value = hand_rate;
+    wrist_ud_rate_elem.value = wrist_ud_rate;
+    wrist_lr_rate_elem.value = wrist_lr_rate;
+    arm_1_rate_elem.value = arm_1_rate;
+    arm_2_rate_elem.value = arm_2_rate;
+    base_rate_elem.value = base_rate;
     controller.addEventListener('input', (e) => {
       // 0.1秒間隔で送信する
       if (controller.timer) {
@@ -130,37 +130,37 @@
       }, 10);
     });
     class Snippet {
-      constructor(name, angle0_rate, angle1_rate, angle2_rate, angle4_rate, angle5_rate, angle6_rate) {
+      constructor(name, hand_rate, wrist_ud_rate, wrist_lr_rate, arm_1_rate, arm_2_rate, base_rate) {
         this.name = name;
-        this.angle0_rate = angle0_rate;
-        this.angle1_rate = angle1_rate;
-        this.angle2_rate = angle2_rate;
-        this.angle4_rate = angle4_rate;
-        this.angle5_rate = angle5_rate;
-        this.angle6_rate = angle6_rate;
+        this.hand_rate = hand_rate;
+        this.wrist_ud_rate = wrist_ud_rate;
+        this.wrist_lr_rate = wrist_lr_rate;
+        this.arm_1_rate = arm_1_rate;
+        this.arm_2_rate = arm_2_rate;
+        this.base_rate = base_rate;
       }
     }
     const sendMoveArm = () => {
-      localStorage.setItem("angle0_rate", 0)
-      angle0_rate = angle0_rate_elem.value;
-      angle1_rate = angle1_rate_elem.value;
-      angle2_rate = angle2_rate_elem.value;
-      angle4_rate = angle4_rate_elem.value;
-      angle5_rate = angle5_rate_elem.value;
-      angle6_rate = angle6_rate_elem.value;
-      localStorage.setItem("angle0_rate", angle0_rate);
-      localStorage.setItem("angle1_rate", angle1_rate);
-      localStorage.setItem("angle2_rate", angle2_rate);
-      localStorage.setItem("angle4_rate", angle4_rate);
-      localStorage.setItem("angle5_rate", angle5_rate);
-      localStorage.setItem("angle6_rate", angle6_rate);
+      localStorage.setItem("hand_rate", 0)
+      hand_rate = hand_rate_elem.value;
+      wrist_ud_rate = wrist_ud_rate_elem.value;
+      wrist_lr_rate = wrist_lr_rate_elem.value;
+      arm_1_rate = arm_1_rate_elem.value;
+      arm_2_rate = arm_2_rate_elem.value;
+      base_rate = base_rate_elem.value;
+      localStorage.setItem("hand_rate", hand_rate);
+      localStorage.setItem("wrist_ud_rate", wrist_ud_rate);
+      localStorage.setItem("wrist_lr_rate", wrist_lr_rate);
+      localStorage.setItem("arm_1_rate", arm_1_rate);
+      localStorage.setItem("arm_2_rate", arm_2_rate);
+      localStorage.setItem("base_rate", base_rate);
       const params = {
-        angle0: 180 * angle0_rate / 100,
-        angle1: 180 * angle1_rate / 100,
-        angle2: 180 * angle2_rate / 100,
-        angle4: 180 * angle4_rate / 100,
-        angle5: 180 * angle5_rate / 100,
-        angle6: 180 * angle6_rate / 100
+        hand_angle: 180 * hand_rate / 100,
+        wrist_ud_angle: 180 * wrist_ud_rate / 100,
+        wrist_lr_angle: 180 * wrist_lr_rate / 100,
+        arm_1_angle: 180 * arm_1_rate / 100,
+        arm_2_angle: 180 * arm_2_rate / 100,
+        base_angle: 180 * base_rate / 100
       };
       const query = new URLSearchParams(params);
 
@@ -210,22 +210,22 @@
         return;
       }
       const snippet = JSON.parse(json);
-      if(!snippet.angle0_rate) {
+      if(!snippet.hand_rate) {
         alert("jsonの形式が違います");
         return;
       }
-      angle0_rate = snippet.angle0_rate
-      angle1_rate = snippet.angle1_rate
-      angle2_rate = snippet.angle2_rate
-      angle4_rate = snippet.angle4_rate
-      angle5_rate = snippet.angle5_rate
-      angle6_rate = snippet.angle6_rate
-      angle0_rate_elem.value = angle0_rate;
-      angle1_rate_elem.value = angle1_rate;
-      angle2_rate_elem.value = angle2_rate;
-      angle4_rate_elem.value = angle4_rate;
-      angle5_rate_elem.value = angle5_rate;
-      angle6_rate_elem.value = angle6_rate;
+      hand_rate = snippet.hand_rate
+      wrist_ud_rate = snippet.wrist_ud_rate
+      wrist_lr_rate = snippet.wrist_lr_rate
+      arm_1_rate = snippet.arm_1_rate
+      arm_2_rate = snippet.arm_2_rate
+      base_rate = snippet.base_rate
+      hand_rate_elem.value = hand_rate;
+      wrist_ud_rate_elem.value = wrist_ud_rate;
+      wrist_lr_rate_elem.value = wrist_lr_rate;
+      arm_1_rate_elem.value = arm_1_rate;
+      arm_2_rate_elem.value = arm_2_rate;
+      base_rate_elem.value = base_rate;
     }
     const clickSnippetSave = (snippet_id) => {
       // ダイアログで名前を入力させる
@@ -258,32 +258,32 @@
       }
       snippet = new Snippet(
         name,
-        angle0_rate,
-        angle1_rate,
-        angle2_rate,
-        angle4_rate,
-        angle5_rate,
-        angle6_rate
+        hand_rate,
+        wrist_ud_rate,
+        wrist_lr_rate,
+        arm_1_rate,
+        arm_2_rate,
+        base_rate
       );
       localStorage.setItem(snippet_id, JSON.stringify({
         name: name,
-        angle0_rate: angle0_rate_elem.value,
-        angle1_rate: angle1_rate_elem.value,
-        angle2_rate: angle2_rate_elem.value,
-        angle4_rate: angle4_rate_elem.value,
-        angle5_rate: angle5_rate_elem.value,
-        angle6_rate: angle6_rate_elem.value
+        hand_rate: hand_rate_elem.value,
+        wrist_ud_rate: wrist_ud_rate_elem.value,
+        wrist_lr_rate: wrist_lr_rate_elem.value,
+        arm_1_rate: arm_1_rate_elem.value,
+        arm_2_rate: arm_2_rate_elem.value,
+        base_rate: base_rate_elem.value
       }));
       snippets[snippet_id] = snippet;
     }
     const saveLocalStorage = () => {
       console.log("saveLocalStorage")
-      localStorage.setItem("angle0_rate", angle0_rate);
-      localStorage.setItem("angle1_rate", angle1_rate);
-      localStorage.setItem("angle2_rate", angle2_rate);
-      localStorage.setItem("angle4_rate", angle4_rate);
-      localStorage.setItem("angle5_rate", angle5_rate);
-      localStorage.setItem("angle6_rate", angle6_rate);
+      localStorage.setItem("hand_rate", hand_rate);
+      localStorage.setItem("wrist_ud_rate", wrist_ud_rate);
+      localStorage.setItem("wrist_lr_rate", wrist_lr_rate);
+      localStorage.setItem("arm_1_rate", arm_1_rate);
+      localStorage.setItem("arm_2_rate", arm_2_rate);
+      localStorage.setItem("base_rate", base_rate);
     }
     const loadSnippetSetting = (snippet_id) => {
       console.log("loadCurrentSetting")
@@ -292,18 +292,18 @@
         return;
       }
       console.log(snippet_id, snippet);
-      angle0_rate = snippet.angle0_rate
-      angle1_rate = snippet.angle1_rate
-      angle2_rate = snippet.angle2_rate
-      angle4_rate = snippet.angle4_rate
-      angle5_rate = snippet.angle5_rate
-      angle6_rate = snippet.angle6_rate
-      angle0_rate_elem.value = angle0_rate;
-      angle1_rate_elem.value = angle1_rate;
-      angle2_rate_elem.value = angle2_rate;
-      angle4_rate_elem.value = angle4_rate;
-      angle5_rate_elem.value = angle5_rate;
-      angle6_rate_elem.value = angle6_rate;
+      hand_rate = snippet.hand_rate
+      wrist_ud_rate = snippet.wrist_ud_rate
+      wrist_lr_rate = snippet.wrist_lr_rate
+      arm_1_rate = snippet.arm_1_rate
+      arm_2_rate = snippet.arm_2_rate
+      base_rate = snippet.base_rate
+      hand_rate_elem.value = hand_rate;
+      wrist_ud_rate_elem.value = wrist_ud_rate;
+      wrist_lr_rate_elem.value = wrist_lr_rate;
+      arm_1_rate_elem.value = arm_1_rate;
+      arm_2_rate_elem.value = arm_2_rate;
+      base_rate_elem.value = base_rate;
     }
     loadSnippets();
   </script>
