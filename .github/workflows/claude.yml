@@ -29,7 +29,15 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
-
+      - name: Debug git status
+        run: |
+          git status
+          git branch -vv
+          git remote -v
+          git log -1 --oneline
+      - name: Debug push dry-run
+        run: |
+          git push --dry-run origin HEAD
       - name: Run Claude Code
         id: claude
         uses: anthropics/claude-code-action@v1
