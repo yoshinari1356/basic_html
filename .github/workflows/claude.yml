@@ -29,6 +29,12 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
+      - name: Force minimal Claude settings
+        run: |
+          mkdir -p /home/runner/.claude
+          cat > /home/runner/.claude/settings.json <<'JSON'
+          {}
+          JSON
       - name: Run Claude Code
         id: claude
         uses: anthropics/claude-code-action@v1
