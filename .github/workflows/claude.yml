@@ -32,6 +32,7 @@ jobs:
       - name: Run Claude Code
         id: claude
         uses: anthropics/claude-code-action@v1
+        continue-on-error: true
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           branch_prefix: claude-
@@ -57,6 +58,13 @@ jobs:
           #       "NODE_ENV": "test"
           #     }
           #   }
+      - name: List remote branches (API)
+        if: always()
+        run: |
+          curl -s -H "Authorization: Bearer ${{ github.token }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/branches?per_page=100" \
+            | jq -r '.[].name' | sed -n '1,120p'
       - name: Debug git status
         run: |
           git status
@@ -66,3 +74,6 @@ jobs:
       - name: Debug push dry-run
         run: |
           git push --dry-run origin HEAD
+      - name: Fail if Claude failed
+        if: steps.claude.outcome == 'failure'
+        run: exit 1
