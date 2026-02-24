@@ -25,6 +25,30 @@ jobs:
       id-token: write
       actions: read # Required for Claude to read CI results on PRs
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Claude Code
+        id: claude
+        uses: anthropics/claude-code-action@v1
+        continue-on-error: true
+        with:
+          branch_prefix: claude-
+          show_full_output: "true"
+
+      - name: Debug after Claude
+        if: always()
+        run: |
+          echo "Outcome: ${{ steps.claude.outcome }}"
+          git status
+          git branch -vv
+          git log -10 --oneline || true
+          git diff --stat || true
+
+      - name: Fail if Claude failed
+        if: steps.claude.outcome == 'failure'
+        run: exit 1
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
@@ -38,26 +62,6 @@ jobs:
           branch_prefix: claude-
           show_full_output: "true"
 
-          # Optional: Customize the trigger phrase (default: @claude)
-          # trigger_phrase: "/claude"
-
-          # Optional: Trigger when specific user is assigned to an issue
-          # assignee_trigger: "claude-bot"
-
-          # Optional: Configure Claude's behavior with CLI arguments
-          # claude_args: |
-          #   --model claude-opus-4-1-20250805
-          #   --max-turns 10
-          #   --allowedTools "Bash(npm install),Bash(npm run build),Bash(npm run test:*),Bash(npm run lint:*)"
-          #   --system-prompt "Follow our coding standards. Ensure all new code has tests. Use TypeScript for new files."
-
-          # Optional: Advanced settings configuration
-          # settings: |
-          #   {
-          #     "env": {
-          #       "NODE_ENV": "test"
-          #     }
-          #   }
       - name: List remote branches (API)
         if: always()
         run: |
