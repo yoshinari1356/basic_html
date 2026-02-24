@@ -61,12 +61,14 @@ jobs:
             "https://api.github.com/repos/${{ github.repository }}/branches?per_page=100" \
             | jq -r '.[].name' | sed -n '1,120p'
       - name: Debug git status
+        if: always()
         run: |
           git status
           git branch -vv
           git remote -v
           git log -1 --oneline
       - name: Debug push dry-run
+        if: always()
         run: |
           git push --dry-run origin HEAD
       - name: Fail if Claude failed
