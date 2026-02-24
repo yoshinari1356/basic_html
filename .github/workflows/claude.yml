@@ -23,22 +23,25 @@ jobs:
       pull-requests: write
       issues: write
       id-token: write
-      actions: read # Required for Claude to read CI results on PRs
+      actions: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0   # 比較・ブランチ作成で詰まりにくい
+
       - name: Enable Claude Code debug logs
         run: |
           echo "CLAUDE_CODE_DEBUG_LOGS_DIR=/home/runner/claude-debug" >> $GITHUB_ENV
           mkdir -p /home/runner/claude-debug
+
       - name: Force minimal Claude settings
         run: |
           mkdir -p /home/runner/.claude
           cat > /home/runner/.claude/settings.json <<'JSON'
           {}
           JSON
+
       - name: Run Claude Code
         id: claude
         uses: anthropics/claude-code-action@v1
@@ -47,30 +50,30 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           branch_prefix: claude-
           show_full_output: "true"
+
       - name: Dump Claude debug logs
         if: always()
         run: |
           ls -la /home/runner/claude-debug || true
           echo "---- latest ----"
-          tail -n 200 /home/runner/claude-debug/latest 2>/dev/null || true
-      - name: List remote branches (API)
-        if: always()
-        run: |
-          curl -s -H "Authorization: Bearer ${{ github.token }}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/branches?per_page=100" \
-            | jq -r '.[].name' | sed -n '1,120p'
+          tail -n 400 /home/runner/claude-debug/latest 2>/dev/null || true
+          echo "---- debug dir find ----"
+          find /home/runner/claude-debug -maxdepth 2 -type f -print || true
+
       - name: Debug git status
         if: always()
         run: |
           git status
           git branch -vv
           git remote -v
-          git log -1 --oneline
+          git log -5 --oneline || true
+          git diff --stat || true
+
       - name: Debug push dry-run
         if: always()
         run: |
-          git push --dry-run origin HEAD
+          git push --dry-run origin HEAD || true
+
       - name: Fail if Claude failed
         if: steps.claude.outcome == 'failure'
         run: exit 1
