@@ -33,12 +33,6 @@ jobs:
         run: |
           echo "CLAUDE_CODE_DEBUG_LOGS_DIR=/home/runner/claude-debug" >> $GITHUB_ENV
           mkdir -p /home/runner/claude-debug
-      - name: Dump Claude debug logs
-        if: always()
-        run: |
-          ls -la /home/runner/claude-debug || true
-          echo "---- latest ----"
-          tail -n 200 /home/runner/claude-debug/latest 2>/dev/null || true
       - name: Force minimal Claude settings
         run: |
           mkdir -p /home/runner/.claude
@@ -53,7 +47,12 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           branch_prefix: claude-
           show_full_output: "true"
-
+      - name: Dump Claude debug logs
+        if: always()
+        run: |
+          ls -la /home/runner/claude-debug || true
+          echo "---- latest ----"
+          tail -n 200 /home/runner/claude-debug/latest 2>/dev/null || true
       - name: List remote branches (API)
         if: always()
         run: |
