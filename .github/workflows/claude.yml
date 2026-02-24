@@ -32,9 +32,8 @@ jobs:
 
       - name: Enable Claude Code debug logs
         run: |
-          echo "CLAUDE_CODE_DEBUG_LOGS_DIR=/home/runner/claude-debug" >> $GITHUB_ENV
           mkdir -p /home/runner/claude-debug
-
+          echo "CLAUDE_CODE_DEBUG_LOGS_DIR=/home/runner/claude-debug/claude-sdk.log" >> $GITHUB_ENV
       - name: Force minimal Claude settings
         run: |
           mkdir -p /home/runner/.claude
@@ -55,10 +54,10 @@ jobs:
         if: always()
         run: |
           ls -la /home/runner/claude-debug || true
+          echo "---- claude-sdk.log ----"
+          tail -n 400 /home/runner/claude-debug/claude-sdk.log 2>/dev/null || true
           echo "---- latest ----"
           tail -n 400 /home/runner/claude-debug/latest 2>/dev/null || true
-          echo "---- debug dir find ----"
-          find /home/runner/claude-debug -maxdepth 2 -type f -print || true
 
       - name: Debug git status
         if: always()
