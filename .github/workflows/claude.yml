@@ -50,6 +50,23 @@ jobs:
           branch_prefix: claude-
           show_full_output: "true"
 
+      - name: Detect Anthropic API errors
+        if: always()
+        run: |
+          LOG_FILE="/home/runner/claude-debug/claude-sdk.log"
+
+          if [ -f "$LOG_FILE" ]; then
+            if grep -E -q "billing_error|Credit balance is too low|401|Unauthorized" "$LOG_FILE"; then
+              echo ""
+              echo "❌ Claude API failure detected."
+              echo "Likely causes:"
+              echo "  - Insufficient credits"
+              echo "  - Invalid API key"
+              echo "  - Billing not enabled"
+              echo ""
+              exit 1
+            fi
+          fi
       - name: Dump Claude debug logs
         if: always()
         run: |
