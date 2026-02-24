@@ -25,30 +25,6 @@ jobs:
       id-token: write
       actions: read # Required for Claude to read CI results on PRs
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Run Claude Code
-        id: claude
-        uses: anthropics/claude-code-action@v1
-        continue-on-error: true
-        with:
-          branch_prefix: claude-
-          show_full_output: "true"
-
-      - name: Debug after Claude
-        if: always()
-        run: |
-          echo "Outcome: ${{ steps.claude.outcome }}"
-          git status
-          git branch -vv
-          git log -10 --oneline || true
-          git diff --stat || true
-
-      - name: Fail if Claude failed
-        if: steps.claude.outcome == 'failure'
-        run: exit 1
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
