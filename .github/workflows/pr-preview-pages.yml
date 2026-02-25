@@ -154,11 +154,16 @@ jobs:
             cp ".preview_out/index.html" ".preview_out/404.html"
           fi
 
-          # ↓ ここに追加 ↓
-          # PRバナー: HTMLの<body>タグに を注入
           PR_NUM="${{ steps.pr_num.outputs.number }}"
+          PAGES_BASE="https://yoshinari1356.github.io/basic_html/pr-${PR_NUM}"
+          
+          # 1. <body> に data-pr 属性を注入
           find .preview_out -name "*.html" | xargs sed -i \
             "s|<body\([^>]*\)>|<body\1>|Ig"
+          
+          # 2. <head> に pr-banner.css のリンクを注入（絶対URLでサブディレクトリでも動作）
+          find .preview_out -name "*.html" | xargs sed -i \
+            "s|</head>|<link rel=\"stylesheet\" href=\"${PAGES_BASE}/pr-banner.css\"></head>|Ig"
 
       - name: Deploy to gh-pages (pr-<number>/)
         uses: JamesIves/github-pages-deploy-action@v4
