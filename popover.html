@@ -4,130 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Popover API サンプル</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      padding: 2rem;
-      background-color: #f5f5f5;
-    }
-
-    h1 {
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
-    }
-
-    h2 {
-      font-size: 1.2rem;
-      margin-top: 2rem;
-      margin-bottom: 0.5rem;
-      border-bottom: 2px solid #ccc;
-      padding-bottom: 0.25rem;
-    }
-
-    section {
-      margin-bottom: 2rem;
-    }
-
-    /* トリガーボタン */
-    .btn {
-      padding: 0.5rem 1.2rem;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.95rem;
-      font-weight: bold;
-      margin-right: 0.5rem;
-    }
-
-    .btn-primary {
-      background-color: #4f8ef7;
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background-color: #3a78e0;
-    }
-
-    .btn-close {
-      background-color: #e05555;
-      color: white;
-    }
-
-    .btn-close:hover {
-      background-color: #c43f3f;
-    }
-
-    /* ── Auto Popover ── */
-    #popover-auto {
-      padding: 1.2rem 1.5rem;
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      background: white;
-      max-width: 320px;
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-
-    #popover-auto:popover-open {
-      display: block;
-    }
-
-    /* ── Manual Popover ── */
-    #popover-manual {
-      padding: 1.2rem 1.5rem;
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      background: #fffbea;
-      max-width: 320px;
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-
-    #popover-manual:popover-open {
-      display: block;
-    }
-
-    /* ── Backdrop (auto popover の背景) ── */
-    #popover-with-backdrop {
-      padding: 1.5rem 2rem;
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-      background: white;
-      max-width: 360px;
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-
-    #popover-with-backdrop::backdrop {
-      background: rgba(0, 0, 0, 0.4);
-    }
-
-    /* ── Tooltip 風 Popover ── */
-    .tooltip-wrapper {
-      position: relative;
-      display: inline-block;
-    }
-
-    #popover-tooltip {
-      background: #333;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 0.4rem 0.8rem;
-      font-size: 0.85rem;
-      white-space: nowrap;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-      /* anchor-positioning がある環境では position-anchor で配置可能 */
-      margin-top: 0.5rem;
-    }
-
-    #popover-tooltip:popover-open {
-      display: block;
-    }
-  </style>
 </head>
 <body>
 
@@ -142,7 +18,7 @@
     <h2>① Auto Popover（外をクリックで閉じる）</h2>
     <p><code>popover="auto"</code> はポップオーバー外をクリックすると自動で閉じます。</p>
 
-    <button class="btn btn-primary" popovertarget="popover-auto">
+    <button popovertarget="popover-auto">
       ポップオーバーを開く
     </button>
 
@@ -157,12 +33,12 @@
     <h2>② Manual Popover（明示的に操作が必要）</h2>
     <p><code>popover="manual"</code> は外クリックでは閉じず、ボタン操作でのみ開閉します。</p>
 
-    <button class="btn btn-primary"
+    <button
             popovertarget="popover-manual"
             popovertargetaction="show">
       開く
     </button>
-    <button class="btn btn-close"
+    <button
             popovertarget="popover-manual"
             popovertargetaction="hide">
       閉じる
@@ -179,7 +55,7 @@
     <h2>③ Backdrop 付き Popover</h2>
     <p><code>::backdrop</code> 疑似要素で背景を暗くできます。</p>
 
-    <button class="btn btn-primary" popovertarget="popover-with-backdrop">
+    <button popovertarget="popover-with-backdrop">
       開く（背景が暗くなる）
     </button>
 
@@ -189,7 +65,7 @@
         <code>::backdrop</code> でオーバーレイを表現できます。<br>
         外をクリックすると閉じます。
       </p>
-      <button class="btn btn-close"
+      <button
               popovertarget="popover-with-backdrop"
               popovertargetaction="hide">
         閉じる
@@ -202,8 +78,8 @@
     <h2>④ JavaScript による制御</h2>
     <p><code>showPopover()</code> / <code>hidePopover()</code> / <code>togglePopover()</code> で操作できます。</p>
 
-    <button class="btn btn-primary" id="js-open">JS で開く</button>
-    <button class="btn btn-close" id="js-close">JS で閉じる</button>
+    <button id="js-open">JS で開く</button>
+    <button id="js-close">JS で閉じる</button>
 
     <div id="popover-js" popover="manual">
       <strong>JS 制御 Popover</strong>
