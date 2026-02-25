@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map</title>
+  <link rel="stylesheet" href="../base.css">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C47VJ5PWGB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-C47VJ5PWGB');
+  </script>
+</head>
+<body>
+  <h1>GoogleMap</h1>
+  <nav class="">
+    <ol>
+        <li class=""><a href="map.html">map</a></li>
+        <li class=""><a href="map_simple.html">map_simple</a></li>
+        <li class=""><a href="map_api_custom_marker.html">map_api_custom_marker</a></li>
+        <li class=""><a href="map_api_info_window.html">map_api_info_window</a></li>
+        <li class=""><a href="map_api_marker_clustering.html">map_api_marker_clustering</a></li>
+    </ol>
+  </nav>
+  <section>
+    <section>
+      <h3>マーカークラスタリング</h3>
+      <p>https://developers.google.com/maps/documentation/javascript/marker-clustering?hl=ja</p>
+      <div id="map"></div>
+      <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtqjDbVV9ySxQGoPJtK84DszPnCGE0IcU&callback=initMap"
+        defer
+      ></script>
+      <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
+      <script>
+        function initMap() {
+          console.log("initMap")
+          const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 3,
+            center: { lat: -28.024, lng: 140.887 },
+          });
+          const infoWindow = new google.maps.InfoWindow({
+            content: "",
+            disableAutoPan: true,
+          });
+          // Create an array of alphabetical characters used to label the markers.
+          const labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          // Add some markers to the map.
+          const markers = locations.map((position, i) => {
+            const label = labels[i % labels.length];
+            const marker = new google.maps.Marker({
+              position,
+              label,
+            });
+
+            // markers can only be keyboard focusable when they have click listeners
+            // open info window when marker is clicked
+            marker.addListener("click", () => {
+              infoWindow.setContent(label);
+              infoWindow.open(map, marker);
+            });
+            return marker;
+          });
+
+          // Add a marker clusterer to manage the markers.
+          new markerClusterer.MarkerClusterer({ markers, map });
+        }
+
+        const locations = [
+          { lat: -31.56391, lng: 147.154312 },
+          { lat: -33.718234, lng: 150.363181 },
+          { lat: -33.727111, lng: 150.371124 },
+          { lat: -33.848588, lng: 151.209834 },
+          { lat: -33.851702, lng: 151.216968 },
+          { lat: -34.671264, lng: 150.863657 },
+          { lat: -35.304724, lng: 148.662905 },
+          { lat: -36.817685, lng: 175.699196 },
+          { lat: -36.828611, lng: 175.790222 },
+          { lat: -37.75, lng: 145.116667 },
+          { lat: -37.759859, lng: 145.128708 },
+          { lat: -37.765015, lng: 145.133858 },
+          { lat: -37.770104, lng: 145.143299 },
+          { lat: -37.7737, lng: 145.145187 },
+          { lat: -37.774785, lng: 145.137978 },
+          { lat: -37.819616, lng: 144.968119 },
+          { lat: -38.330766, lng: 144.695692 },
+          { lat: -39.927193, lng: 175.053218 },
+          { lat: -41.330162, lng: 174.865694 },
+          { lat: -42.734358, lng: 147.439506 },
+          { lat: -42.734358, lng: 147.501315 },
+          { lat: -42.735258, lng: 147.438 },
+          { lat: -43.999792, lng: 170.463352 },
+        ];
+
+        window.initMap = initMap;
+
+      </script>
+    </section>
+    <style>
+      #map,
+      .map {
+        height: 300px;
+      }
+    </style>
+  </section>
+</body>
+</html>
