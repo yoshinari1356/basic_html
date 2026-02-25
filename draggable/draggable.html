@@ -11,41 +11,25 @@
           id="draggable-1"
           class="example-draggable"
           draggable="true"
-          ondragstart="onDragStart(event, 'all');"
+          ondragstart="onDragStart(event);"
         >
-          draggable all
-        </div>
-        <div
-          id="draggable-1"
-          class="example-draggable"
-          draggable="true"
-          ondragstart="onDragStart(event, 'move');"
-        >
-          draggable move
+          draggable
         </div>
         <div
           id="draggable-2"
           class="example-draggable"
           draggable="true"
-          ondragstart="onDragStart(event, 'copy');"
+          ondragstart="onDragStart(event);"
         >
-          draggable copy
+          draggable
         </div>
         <div
           id="draggable-3"
           class="example-draggable"
           draggable="true"
-          ondragstart="onDragStart(event, 'copyMove');"
+          ondragstart="onDragStart(event);"
         >
-          draggable copyMove
-        </div>
-        <div
-          id="draggable-3"
-          class="example-draggable"
-          draggable="true"
-          ondragstart="onDragStart(event, 'link');"
-        >
-          draggable link
+          draggable
         </div>
       </div>
 
@@ -70,21 +54,13 @@
       >
         dropzone
       </div>
-      <div
-        class="example-dropzone"
-        ondragover="onDragOver(event);"
-        ondrop="onDrop(event);"
-      >
-        dropzone
-      </div>
     </div>
     <script>
-      function onDragStart(event, effectAllowed) {
-        // console.log("onDragStart", effectAllowed)
-        // ブラウザでドラッグ操作をした際に許可される効果を指定する
-        // https://developer.mozilla.org/ja/docs/Web/API/DataTransfer/effectAllowed
-        event.dataTransfer.effectAllowed = effectAllowed;
-        event.dataTransfer.setData('text/plain', event.target.id);
+      function onDragStart(event) {
+        console.log("onDragStart")
+        event
+          .dataTransfer
+          .setData('text/plain', event.target.id);
       }
       function onDragOver(event) {
         console.log("onDragOver")
