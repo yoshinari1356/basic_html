@@ -114,7 +114,61 @@ jobs:
           folder: .preview_out
           target-folder: pr-${{ steps.pr_num.outputs.number }}
           clean: false
+      - name: Update gh-pages preview list (pr-index.html)
+        shell: bash
+        run: |
+          set -euo pipefail
 
+          rm -rf /tmp/gh-pages
+          git clone --depth 1 --branch gh-pages "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" /tmp/gh-pages
+
+          cd /tmp/gh-pages
+
+          python3 - <<'PY'
+          import os, re, html, datetime
+
+          entries = []
+          for name in os.listdir('.'):
+            if os.path.isdir(name) and re.match(r'^pr-\d+$', name):
+              mtime = datetime.datetime.fromtimestamp(os.path.getmtime(name))
+              entries.append((name, mtime))
+          entries.sort(key=lambda x: x[1], reverse=True)
+
+          items = "\n".join(
+            f'<li><a href="{html.escape(d)}/">{html.escape(d)}/</a> '
+            f'<small>({t:%Y-%m-%d %H:%M})</small></li>'
+            for d, t in entries
+          ) or "<li><em>No previews</em></li>"
+
+          out = f"""<!doctype html>
+          <html lang="ja">
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>PR Previews</title>
+          <body style="font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; padding: 24px;">
+            <h1>PR Previews</h1>
+            <p><a href="./">Back to root</a></p>
+            <ul>
+              {items}
+            </ul>
+          </body>
+          </html>
+          """
+          with open("pr-index.html", "w", encoding="utf-8") as f:
+            f.write(out)
+          print("Generated pr-index.html:", len(entries), "entries")
+          PY
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add pr-index.html
+          if git diff --cached --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+          git commit -m "chore: update pr preview list"
+          git push
       - name: Comment preview URL on PR
         uses: actions/github-script@v7
         with:
