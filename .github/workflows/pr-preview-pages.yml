@@ -1,35 +1,136 @@
-name: PR Preview to GitHub Pages (no build)
+name: PR Preview (GitHub Pages, comment command)
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
+  issue_comment:
+    types: [created]
 
 permissions:
   contents: write
-  pull-requests: write
+  pull-requests: read
+  issues: write
 
 concurrency:
-  group: pr-preview-${{ github.event.pull_request.number }}
+  group: pr-preview-${{ github.event.issue.number }}
   cancel-in-progress: true
 
 env:
-  # ✅ ここを変えるだけで「公開したいディレクトリ」を指定できます
-  # 例) docs を公開したい -> SITE_DIR: docs
-  # 例) repo直下を公開したい -> SITE_DIR: .
-  SITE_DIR: .
+  # 公開したいディレクトリ（repo直下なら "."、docs 配下なら "docs" など）
+  SITE_DIR: "."
 
 jobs:
-  deploy:
-    if: github.event.action != 'closed'
+  preview:
+    # PRへのコメントで、かつ /preview が含まれるときだけ反応
+    if: |
+      github.event.issue.pull_request != null &&
+      contains(github.event.comment.body, '/preview')
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout PR branch
-        uses: actions/checkout@v4
+      - name: Authorize (allow only write/maintain/admin)
+        id: auth
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo  = context.repo.repo;
+            const login = context.payload.comment.user.login;
+            const prNumber = context.payload.issue.number;
 
-      - name: Prepare site files (copy sources)
+            // Collaborator permission level: none/read/triage/write/maintain/admin
+            const { data } = await github.rest.repos.getCollaboratorPermissionLevel({
+              owner, repo, username: login,
+            });
+
+            const perm = data.permission;
+            const allowed = ["write", "maintain", "admin"].includes(perm);
+
+            core.setOutput("allowed", String(allowed));
+            core.setOutput("perm", perm);
+            core.setOutput("login", login);
+            core.setOutput("pr_number", String(prNumber));
+
+            if (!allowed) {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: prNumber,
+                body:
+                  `⛔ 権限不足のため実行できません。\n\n` +
+                  `実行者: @${login}\n` +
+                  `権限: ${perm}\n` +
+                  `必要: write / maintain / admin\n\n` +
+                  `使い方: \`/preview deploy\` または \`/preview cleanup\``,
+              });
+            }
+
+      - name: Parse command
+        if: steps.auth.outputs.allowed == 'true'
+        id: cmd
+        shell: bash
+        run: |
+          BODY="${{ github.event.comment.body }}"
+
+          # 期待コマンド:
+          #   /preview deploy
+          #   /preview cleanup
+          if echo "$BODY" | grep -Eq '(^|\s)/preview\s+cleanup(\s|$)'; then
+            echo "ACTION=cleanup" >> $GITHUB_OUTPUT
+          elif echo "$BODY" | grep -Eq '(^|\s)/preview\s+deploy(\s|$)'; then
+            echo "ACTION=deploy" >> $GITHUB_OUTPUT
+          else
+            echo "ACTION=unknown" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Reply usage for unknown command
+        if: steps.auth.outputs.allowed == 'true' && steps.cmd.outputs.ACTION == 'unknown'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo  = context.repo.repo;
+            const prNumber = context.payload.issue.number;
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: prNumber,
+              body: `⚠️ コマンドが不明です。\n\n使い方:\n- \`/preview deploy\`\n- \`/preview cleanup\``,
+            });
+
+      - name: Get PR info (head ref)
+        if: steps.auth.outputs.allowed == 'true' && steps.cmd.outputs.ACTION != 'unknown'
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo  = context.repo.repo;
+            const prNumber = context.payload.issue.number;
+
+            const { data: pr } = await github.rest.pulls.get({
+              owner, repo, pull_number: prNumber
+            });
+
+            core.setOutput("number", String(pr.number));
+            core.setOutput("head_ref", pr.head.ref);
+            core.setOutput("head_repo_full_name", pr.head.repo.full_name);
+
+      # deploy時だけPRブランチをcheckout
+      - name: Checkout PR branch
+        if: steps.auth.outputs.allowed == 'true' && steps.cmd.outputs.ACTION == 'deploy'
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ steps.pr.outputs.head_repo_full_name }}
+          ref: ${{ steps.pr.outputs.head_ref }}
+
+      - name: Prepare site files (copy sources; no build)
+        if: steps.auth.outputs.allowed == 'true' && steps.cmd.outputs.ACTION == 'deploy'
+        shell: bash
         run: |
           mkdir -p .preview_out
+
+          # 静的サイトをそのままコピー（危険なもの/巨大なものは除外）
           rsync -av --delete \
             --exclude ".git/" \
             --exclude ".github/" \
@@ -41,63 +142,65 @@ jobs:
             --exclude "secrets.*" \
             "${SITE_DIR}/" ".preview_out/"
 
-          # GitHub Pagesで SPA ルーティングしたい場合の保険（不要なら消してOK）
-          # 既に404.htmlがあるなら何もしない
+          # SPAのリロード対策（不要なら消してOK）
           if [ ! -f ".preview_out/404.html" ] && [ -f ".preview_out/index.html" ]; then
             cp ".preview_out/index.html" ".preview_out/404.html"
           fi
 
+          # PagesのJekyll処理を無効化したい場合（必要なら）
+          # touch .preview_out/.nojekyll
+
       - name: Deploy to gh-pages (target folder = pr-<number>)
+        if: steps.auth.outputs.allowed == 'true' && steps.cmd.outputs.ACTION == 'deploy'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: .preview_out
-          target-folder: pr-${{ github.event.pull_request.number }}
+          target-folder: pr-${{ steps.pr.outputs.number }}
           clean: false
 
-      - name: Comment preview URL on PR
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const pr = context.payload.pull_request;
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            const url = `https://${owner}.github.io/${repo}/pr-${pr.number}/`;
-
-            const marker = "✅ PR Preview (GitHub Pages)";
-            const body = `${marker}\n\n${url}\n\n更新: ${new Date().toISOString()}`;
-
-            const { data: comments } = await github.rest.issues.listComments({
-              owner, repo, issue_number: pr.number, per_page: 100
-            });
-            const existing = comments.find(c => c.body?.includes(marker) && c.user?.type === "Bot");
-
-            if (existing) {
-              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
-            } else {
-              await github.rest.issues.createComment({ owner, repo, issue_number: pr.number, body });
-            }
-
-  cleanup:
-    if: github.event.action == 'closed'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout gh-pages
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-
-      - name: Remove preview folder
+      - name: Cleanup preview folder on gh-pages
+        if: steps.auth.outputs.allowed == 'true' && steps.cmd.outputs.ACTION == 'cleanup'
+        shell: bash
         run: |
-          PR_DIR="pr-${{ github.event.pull_request.number }}"
-          if [ -d "$PR_DIR" ]; then rm -rf "$PR_DIR"; fi
+          git clone --depth=1 --branch gh-pages \
+            "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" ghp
 
-      - name: Commit & push cleanup
-        run: |
+          cd ghp
+          PR_DIR="pr-${{ steps.pr.outputs.number }}"
+
+          if [ -d "$PR_DIR" ]; then
+            rm -rf "$PR_DIR"
+          fi
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
-          if git diff --cached --quiet; then exit 0; fi
-          git commit -m "chore: remove preview for PR #${{ github.event.pull_request.number }}"
+
+          if git diff --cached --quiet; then
+            echo "Nothing to cleanup"
+            exit 0
+          fi
+
+          git commit -m "chore: remove preview for PR #${{ steps.pr.outputs.number }}"
           git push
+
+      - name: Comment result on PR
+        if: steps.auth.outputs.allowed == 'true' && steps.cmd.outputs.ACTION != 'unknown'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo  = context.repo.repo;
+            const prNumber = Number("${{ steps.pr.outputs.number }}");
+            const action = "${{ steps.cmd.outputs.ACTION }}";
+            const url = `https://${owner}.github.io/${repo}/pr-${prNumber}/`;
+
+            const body =
+              action === "deploy"
+                ? `✅ Preview deployed\n\n${url}\n\n（コマンド: \`/preview deploy\`）`
+                : `🧹 Preview cleaned\n\npr-${prNumber} を削除しました。\n\n（コマンド: \`/preview cleanup\`）`;
+
+            await github.rest.issues.createComment({
+              owner, repo, issue_number: prNumber, body
+            });
