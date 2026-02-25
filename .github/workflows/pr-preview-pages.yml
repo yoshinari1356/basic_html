@@ -1,6 +1,8 @@
 name: PR Preview (GitHub Pages)
 
 on:
+  push:
+    branches: [master]
   issue_comment:
     types: [created]
   pull_request:
@@ -16,6 +18,50 @@ env:
   SITE_DIR: "."
 
 jobs:
+  # ───────────────────────────────────────────────────────────────────
+  # publish_root: master の内容を gh-pages ルートへ同期（pr-* は残す）
+  # ───────────────────────────────────────────────────────────────────
+  publish_root:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: pages-root
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v4
+
+      - name: Prepare root site files
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .site_out
+          rsync -av --delete \
+            --exclude ".git/" \
+            --exclude ".github/" \
+            --exclude "node_modules/" \
+            --exclude ".env" \
+            --exclude ".env.*" \
+            --exclude "*.pem" \
+            --exclude "*.key" \
+            --exclude "secrets.*" \
+            "${SITE_DIR}/" ".site_out/"
+
+          # SPA のリロード対策
+          if [ ! -f ".site_out/404.html" ] && [ -f ".site_out/index.html" ]; then
+            cp ".site_out/index.html" ".site_out/404.html"
+          fi
+
+      - name: Deploy master to gh-pages root (keep pr-* folders)
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: .site_out
+          clean: true
+          clean-exclude: |
+            pr-*
+
   # ───────────────────────────────────────────────────────────────────
   # deploy: PR push 時の自動デプロイ / /preview deploy コマンド
   # ───────────────────────────────────────────────────────────────────
@@ -90,6 +136,7 @@ jobs:
       - name: Prepare site files
         shell: bash
         run: |
+          set -euo pipefail
           mkdir -p .preview_out
           rsync -av --delete \
             --exclude ".git/" \
@@ -107,82 +154,139 @@ jobs:
             cp ".preview_out/index.html" ".preview_out/404.html"
           fi
 
-      - name: Deploy to gh-pages
+      - name: Deploy to gh-pages (pr-<number>/)
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: .preview_out
           target-folder: pr-${{ steps.pr_num.outputs.number }}
-          clean: false
-      - name: Update gh-pages preview list (pr-index.html)
+          clean: true
+
+      # PR 配下にファイル一覧（pr-index.html）を生成してコミット
+      - name: Generate pr-index.html inside pr-<number>/
         shell: bash
         run: |
           set -euo pipefail
+          PR_NUM="${{ steps.pr_num.outputs.number }}"
+          PR_DIR="pr-${PR_NUM}"
 
           rm -rf /tmp/gh-pages
-          git clone --depth 1 --branch gh-pages "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" /tmp/gh-pages
+          git clone --depth 1 --branch gh-pages \
+            "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" \
+            /tmp/gh-pages
 
           cd /tmp/gh-pages
 
+          if [ ! -d "$PR_DIR" ]; then
+            echo "::error::${PR_DIR} not found on gh-pages"
+            exit 1
+          fi
+
           python3 - <<'PY'
-          import os, re, html, datetime
+          import os, html
 
-          entries = []
-          for name in os.listdir('.'):
-            if os.path.isdir(name) and re.match(r'^pr-\d+$', name):
-              mtime = datetime.datetime.fromtimestamp(os.path.getmtime(name))
-              entries.append((name, mtime))
-          entries.sort(key=lambda x: x[1], reverse=True)
+          pr_dir = os.environ["PR_DIR"]
+          ignore_dirs = {".git", ".github", "node_modules"}
 
-          items = "\n".join(
-            f'<li><a href="{html.escape(d)}/">{html.escape(d)}/</a> '
-            f'<small>({t:%Y-%m-%d %H:%M})</small></li>'
-            for d, t in entries
-          ) or "<li><em>No previews</em></li>"
+          files = []
+          for root, dirs, fs in os.walk(pr_dir):
+            dirs[:] = [d for d in dirs if d not in ignore_dirs and not d.startswith(".git")]
+            for f in fs:
+              if f.startswith(".git"):
+                continue
+              p = os.path.join(root, f)
+              rel = os.path.relpath(p, pr_dir)
+              if rel == "pr-index.html":
+                continue
+              files.append(rel)
+
+          files.sort()
+
+          lis = "\n".join(
+            f'<li><a href="{html.escape(rel)}">{html.escape(rel)}</a></li>'
+            for rel in files
+          ) or "<li><em>No files</em></li>"
 
           out = f"""<!doctype html>
           <html lang="ja">
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1">
-          <title>PR Previews</title>
+          <title>PR files</title>
           <body style="font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; padding: 24px;">
-            <h1>PR Previews</h1>
-            <p><a href="./">Back to root</a></p>
-            <ul>
-              {items}
-            </ul>
-          </body>
-          </html>
+            <h1>PR files</h1>
+            <p><a href="./">Preview top</a></p>
+            <ul>{lis}</ul>
+          </body></html>
           """
-          with open("pr-index.html", "w", encoding="utf-8") as f:
-            f.write(out)
-          print("Generated pr-index.html:", len(entries), "entries")
-          PY
 
+          with open(os.path.join(pr_dir, "pr-index.html"), "w", encoding="utf-8") as f:
+            f.write(out)
+          print("Generated:", os.path.join(pr_dir, "pr-index.html"), "files:", len(files))
+          PY
+        env:
+          PR_DIR: pr-${{ steps.pr_num.outputs.number }}
+
+      - name: Commit & push pr-index.html
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd /tmp/gh-pages
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git add pr-index.html
+          git add pr-${{ steps.pr_num.outputs.number }}/pr-index.html
           if git diff --cached --quiet; then
             echo "No changes"
             exit 0
           fi
-          git commit -m "chore: update pr preview list"
+          git commit -m "chore: add/update pr-index for PR #${{ steps.pr_num.outputs.number }}"
           git push
-      - name: Comment preview URL on PR
+
+      - name: Upsert comment (preview URL + file list)
         uses: actions/github-script@v7
         with:
           script: |
             const prNumber = Number("${{ steps.pr_num.outputs.number }}");
             const isAuto = "${{ github.event_name }}" === "pull_request";
             const trigger = isAuto ? "自動デプロイ" : "`/preview deploy`";
-            const url = `https://${context.repo.owner}.github.io/${context.repo.repo}/pr-${prNumber}/`;
-            await github.rest.issues.createComment({
+
+            const base = `https://${context.repo.owner}.github.io/${context.repo.repo}`;
+            const previewUrl = `${base}/pr-${prNumber}/`;
+            const fileListUrl = `${base}/pr-${prNumber}/pr-index.html`;
+
+            const marker = "✅ Preview deployed（";
+            const body =
+              `✅ Preview deployed（${trigger}）\n\n` +
+              `🔗 ${previewUrl}\n` +
+              `📄 files: ${fileListUrl}`;
+
+            const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: prNumber,
-              body: `✅ Preview deployed（${trigger}）\n\n🔗 ${url}`,
+              per_page: 100,
             });
+
+            const existing = comments.find(c =>
+              c.user?.type === "Bot" &&
+              typeof c.body === "string" &&
+              c.body.includes(marker)
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body,
+              });
+            }
 
   # ───────────────────────────────────────────────────────────────────
   # cleanup: PR クローズ時の自動削除 / /preview cleanup コマンド
@@ -223,7 +327,6 @@ jobs:
               core.setFailed("Insufficient permissions");
             }
 
-      # PR番号の取得（イベント種別に応じて）
       - name: Get PR number
         id: pr_num
         run: |
@@ -236,6 +339,7 @@ jobs:
       - name: Cleanup preview folder on gh-pages
         shell: bash
         run: |
+          set -euo pipefail
           git clone --depth=1 --branch gh-pages \
             "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" ghp
 
@@ -248,6 +352,7 @@ jobs:
           fi
 
           rm -rf "$PR_DIR"
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
@@ -260,16 +365,42 @@ jobs:
           git commit -m "chore: remove preview for PR #${{ steps.pr_num.outputs.number }}"
           git push
 
-      - name: Comment cleanup result on PR
+      - name: Upsert cleanup comment
         uses: actions/github-script@v7
         with:
           script: |
             const prNumber = Number("${{ steps.pr_num.outputs.number }}");
             const isAuto = "${{ github.event_name }}" === "pull_request";
             const trigger = isAuto ? "PR クローズ（自動）" : "`/preview cleanup`";
-            await github.rest.issues.createComment({
+            const marker = "🧹 Preview cleaned（";
+
+            const body = `🧹 Preview cleaned（${trigger}）\n\npr-${prNumber} を削除しました。`;
+
+            const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: prNumber,
-              body: `🧹 Preview cleaned（${trigger}）\n\npr-${prNumber} を削除しました。`,
+              per_page: 100,
             });
+
+            const existing = comments.find(c =>
+              c.user?.type === "Bot" &&
+              typeof c.body === "string" &&
+              c.body.includes(marker)
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body,
+              });
+            }
