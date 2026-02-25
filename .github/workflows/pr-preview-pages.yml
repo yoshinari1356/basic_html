@@ -1,4 +1,4 @@
-name: PR Preview to GitHub Pages (Static HTML)
+name: PR Preview to GitHub Pages (no build)
 
 on:
   pull_request:
@@ -12,27 +12,48 @@ concurrency:
   group: pr-preview-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
+env:
+  # ✅ ここを変えるだけで「公開したいディレクトリ」を指定できます
+  # 例) docs を公開したい -> SITE_DIR: docs
+  # 例) repo直下を公開したい -> SITE_DIR: .
+  SITE_DIR: .
+
 jobs:
   deploy:
     if: github.event.action != 'closed'
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout PR branch
         uses: actions/checkout@v4
 
-      # PRブランチの内容をそのまま gh-pages の pr-<番号>/ に配置
+      - name: Prepare site files (copy sources)
+        run: |
+          mkdir -p .preview_out
+          rsync -av --delete \
+            --exclude ".git/" \
+            --exclude ".github/" \
+            --exclude "node_modules/" \
+            --exclude ".env" \
+            --exclude ".env.*" \
+            --exclude "*.pem" \
+            --exclude "*.key" \
+            --exclude "secrets.*" \
+            "${SITE_DIR}/" ".preview_out/"
+
+          # GitHub Pagesで SPA ルーティングしたい場合の保険（不要なら消してOK）
+          # 既に404.htmlがあるなら何もしない
+          if [ ! -f ".preview_out/404.html" ] && [ -f ".preview_out/index.html" ]; then
+            cp ".preview_out/index.html" ".preview_out/404.html"
+          fi
+
       - name: Deploy to gh-pages (target folder = pr-<number>)
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: .
+          folder: .preview_out
           target-folder: pr-${{ github.event.pull_request.number }}
           clean: false
-          # これらをプレビューに含めない（必要なら追加）
-          exclude: |
-            .git
-            .github
-            node_modules
 
       - name: Comment preview URL on PR
         uses: actions/github-script@v7
@@ -49,22 +70,18 @@ jobs:
             const { data: comments } = await github.rest.issues.listComments({
               owner, repo, issue_number: pr.number, per_page: 100
             });
-
-            const existing = comments.find(c => c.body && c.body.includes(marker) && c.user.type === "Bot");
+            const existing = comments.find(c => c.body?.includes(marker) && c.user?.type === "Bot");
 
             if (existing) {
-              await github.rest.issues.updateComment({
-                owner, repo, comment_id: existing.id, body
-              });
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
             } else {
-              await github.rest.issues.createComment({
-                owner, repo, issue_number: pr.number, body
-              });
+              await github.rest.issues.createComment({ owner, repo, issue_number: pr.number, body });
             }
 
   cleanup:
     if: github.event.action == 'closed'
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout gh-pages
         uses: actions/checkout@v4
@@ -74,18 +91,13 @@ jobs:
       - name: Remove preview folder
         run: |
           PR_DIR="pr-${{ github.event.pull_request.number }}"
-          if [ -d "$PR_DIR" ]; then
-            rm -rf "$PR_DIR"
-          fi
+          if [ -d "$PR_DIR" ]; then rm -rf "$PR_DIR"; fi
 
       - name: Commit & push cleanup
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
-          if git diff --cached --quiet; then
-            echo "Nothing to cleanup"
-            exit 0
-          fi
+          if git diff --cached --quiet; then exit 0; fi
           git commit -m "chore: remove preview for PR #${{ github.event.pull_request.number }}"
           git push
