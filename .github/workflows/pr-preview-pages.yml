@@ -159,8 +159,7 @@ jobs:
           
           # 1. <body> に data-pr 属性を注入
           find .preview_out -name "*.html" | xargs sed -i \
-            "s|<body\([^>]*\)>|<body\1>|Ig"
-          
+            "s|<body\([^>]*\)>|<body\1 data-pr=\"${PR_NUM}\">|Ig"
           # 2. <head> に pr-banner.css のリンクを注入（絶対URLでサブディレクトリでも動作）
           find .preview_out -name "*.html" | xargs sed -i \
             "s|</head>|<link rel=\"stylesheet\" href=\"${PAGES_BASE}/pr-banner.css\"></head>|Ig"
