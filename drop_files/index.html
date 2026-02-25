@@ -43,7 +43,7 @@
       dropArea.style.backgroundColor = '#e0e0e0'; // ホバー時の色変更
     });
     dropArea.addEventListener('mouseout', () => {
-      dropArea.style.backgroundColor = '#f9f9f9'; // ホバーアウト時の色変更
+      dropArea.style.backgroundColor = ''; // ホバーアウト時に元の色に戻す
     });
     // ドロップエリアをクリックしたときの処理
     dropArea.addEventListener('click', () => {
