@@ -18,28 +18,32 @@ jobs:
       (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
       (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
       pull-requests: write
       issues: write
       id-token: write
       actions: read
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # 比較・ブランチ作成で詰まりにくい
+          fetch-depth: 0
 
-      - name: Enable Claude Code debug logs
+      # Claude SDK がディレクトリに書き込んで落ちないようにする
+      - name: Configure Claude logging
         run: |
           mkdir -p /home/runner/claude-debug
           echo "CLAUDE_CODE_DEBUG_LOGS_DIR=/home/runner/claude-debug/claude-sdk.log" >> $GITHUB_ENV
-      - name: Force minimal Claude settings
+
+      # remote-settings.json ENOENT ノイズ対策
+      - name: Initialize Claude config
         run: |
-          mkdir -p /home/runner/.claude
-          cat > /home/runner/.claude/settings.json <<'JSON'
-          {}
-          JSON
+          mkdir -p ~/.claude
+          echo '{}' > ~/.claude/settings.json
+          echo '{}' > ~/.claude/remote-settings.json
 
       - name: Run Claude Code
         id: claude
@@ -48,47 +52,20 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           branch_prefix: claude-
-          show_full_output: "true"
+          show_full_output: "false"
 
-      - name: Detect Anthropic API errors
+      # Billing / APIエラーを明示的に検知
+      - name: Detect Claude API errors
         if: always()
         run: |
           LOG_FILE="/home/runner/claude-debug/claude-sdk.log"
 
           if [ -f "$LOG_FILE" ]; then
             if grep -E -q "billing_error|Credit balance is too low|401|Unauthorized" "$LOG_FILE"; then
-              echo ""
-              echo "❌ Claude API failure detected."
-              echo "Likely causes:"
-              echo "  - Insufficient credits"
-              echo "  - Invalid API key"
-              echo "  - Billing not enabled"
-              echo ""
+              echo "::error::Claude API failure (credit or auth issue)"
               exit 1
             fi
           fi
-      - name: Dump Claude debug logs
-        if: always()
-        run: |
-          ls -la /home/runner/claude-debug || true
-          echo "---- claude-sdk.log ----"
-          tail -n 400 /home/runner/claude-debug/claude-sdk.log 2>/dev/null || true
-          echo "---- latest ----"
-          tail -n 400 /home/runner/claude-debug/latest 2>/dev/null || true
-
-      - name: Debug git status
-        if: always()
-        run: |
-          git status
-          git branch -vv
-          git remote -v
-          git log -5 --oneline || true
-          git diff --stat || true
-
-      - name: Debug push dry-run
-        if: always()
-        run: |
-          git push --dry-run origin HEAD || true
 
       - name: Fail if Claude failed
         if: steps.claude.outcome == 'failure'
