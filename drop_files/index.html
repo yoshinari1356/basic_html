@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ドロップファイル</title>
+</head>
+<body>
+  <!-- ドロップファイルUI -->
+  <h3>ファイルをここにドロップしてください</h3>
+  <div id="drop-area" style="width: 300px; height: 200px; border: 2px dashed #bbb; display: flex; align-items: center; justify-content: center;">
+    <p>ここにファイルをドロップ</p>
+  </div>
+  <ul id="file-list" style="list-style-type: none; padding: 0; margin-top: 20px;"></ul>
+  <script>
+    const dropArea = document.getElementById('drop-area');
+    const fileList = document.getElementById('file-list');
+
+    // ドロップエリアにファイルをドロップしたときの処理
+    dropArea.addEventListener('dragover', (event) => {
+      event.preventDefault(); // デフォルトの動作を防ぐ
+      dropArea.style.backgroundColor = '#f0f0f0'; // ドロップエリアの色を変更
+    });
+
+    dropArea.addEventListener('dragleave', () => {
+      dropArea.style.backgroundColor = ''; // 元の色に戻す
+    });
+
+    dropArea.addEventListener('drop', (event) => {
+      event.preventDefault(); // デフォルトの動作を防ぐ
+      dropArea.style.backgroundColor = ''; // 元の色に戻す
+
+      const files = event.dataTransfer.files; // ドロップされたファイルを取得
+      for (const file of files) {
+        const li = document.createElement('li');
+        li.textContent = file.name; // ファイル名をリストに追加
+        fileList.appendChild(li);
+      }
+    });
+
+    dropArea.addEventListener('mouseover', () => {
+      dropArea.style.backgroundColor = '#e0e0e0'; // ホバー時の色変更
+    });
+    dropArea.addEventListener('mouseout', () => {
+      dropArea.style.backgroundColor = '#f9f9f9'; // ホバーアウト時の色変更
+    });
+    // ドロップエリアをクリックしたときの処理
+    dropArea.addEventListener('click', () => {
+      alert('ファイルをドロップしてください！');
+    });
+  </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h3 {
+      margin-bottom: 10px;
+    }
+    #drop-area {
+      width: 300px;
+      height: 200px;
+      border: 2px dashed #bbb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease;
+    }
+    #file-list {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+    #file-list li {
+      padding: 5px;
+      background-color: #f0f0f0;
+      margin-bottom: 5px;
+      border-radius: 3px;
+    }
+    #file-list li:hover {
+      background-color: #e0e0e0; /* ホバー時の色変更 */
+    }
+    #file-list li:active {
+      background-color: #d0d0d0; /* クリック時の色変更 */
+    }
+    #file-list li:focus {
+      outline: none; /* フォーカス時のアウトラインを消す */
+      box-shadow: 0 0 5px #aaa; /* フォーカス時の影を追加 */
+    }
+    #file-list li:focus-visible {
+      outline: 2px solid #007bff; /* フォーカス時のアウトラインを追加 */
+    }
+    #file-list li:focus:not(:focus-visible) {
+      outline: none; /* フォーカスが見えない場合はアウトラインを消す */
+    }
+    #file-list li:active {
+      background-color: #d0d0d0; /* クリック時の色変更 */
+    }
+    #file-list li:focus {
+      outline: none; /* フォーカス時のアウトラインを消す */
+      box-shadow: 0 0 5px #aaa; /* フォーカス時の影を追加 */
+    }
+    #file-list li:focus-visible {
+      outline: 2px solid #007bff; /* フォーカス時のアウトラインを追加 */
+    }
+    #file-list li:focus:not(:focus-visible) {
+      outline: none; /* フォーカスが見えない場合はアウトラインを消す */
+    }
+  </style>
+  </script>
+</body>
+</html>
