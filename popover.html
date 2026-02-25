@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Popover API サンプル</title>
+  <link rel="stylesheet" href="base.css">
+  <style>
+    #popover-with-backdrop::backdrop {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Popover API サンプル</h1>
+  <p>
+    ネイティブ HTML の <code>popover</code> 属性を使ったデモです。<br>
+    参考: <a href="https://zenn.dev/yusukehirao/articles/popover-api-and-attributes" target="_blank">Popover API について (Zenn)</a>
+  </p>
+
+  <!-- ① Auto Popover -->
+  <section>
+    <h2>① Auto Popover（外をクリックで閉じる）</h2>
+    <p><code>popover="auto"</code> はポップオーバー外をクリックすると自動で閉じます。</p>
+
+    <button popovertarget="popover-auto">
+      ポップオーバーを開く
+    </button>
+
+    <div id="popover-auto" popover="auto">
+      <strong>Auto Popover</strong>
+      <p>外側をクリックするか、もう一度ボタンを押すと閉じます。</p>
+    </div>
+  </section>
+
+  <!-- ② Manual Popover -->
+  <section>
+    <h2>② Manual Popover（明示的に操作が必要）</h2>
+    <p><code>popover="manual"</code> は外クリックでは閉じず、ボタン操作でのみ開閉します。</p>
+
+    <button
+            popovertarget="popover-manual"
+            popovertargetaction="show">
+      開く
+    </button>
+    <button
+            popovertarget="popover-manual"
+            popovertargetaction="hide">
+      閉じる
+    </button>
+
+    <div id="popover-manual" popover="manual">
+      <strong>Manual Popover</strong>
+      <p>「閉じる」ボタンを押さないと消えません。</p>
+    </div>
+  </section>
+
+  <!-- ③ Backdrop 付き Popover -->
+  <section>
+    <h2>③ Backdrop 付き Popover</h2>
+    <p><code>::backdrop</code> 疑似要素で背景を暗くできます。</p>
+
+    <button popovertarget="popover-with-backdrop">
+      開く（背景が暗くなる）
+    </button>
+
+    <div id="popover-with-backdrop" popover="auto">
+      <strong>Backdrop 付き</strong>
+      <p>
+        <code>::backdrop</code> でオーバーレイを表現できます。<br>
+        外をクリックすると閉じます。
+      </p>
+      <button
+              popovertarget="popover-with-backdrop"
+              popovertargetaction="hide">
+        閉じる
+      </button>
+    </div>
+  </section>
+
+  <!-- ④ JavaScript による制御 -->
+  <section>
+    <h2>④ JavaScript による制御</h2>
+    <p><code>showPopover()</code> / <code>hidePopover()</code> / <code>togglePopover()</code> で操作できます。</p>
+
+    <button id="js-open">JS で開く</button>
+    <button id="js-close">JS で閉じる</button>
+
+    <div id="popover-js" popover="manual">
+      <strong>JS 制御 Popover</strong>
+      <p>JavaScript の API (<code>showPopover</code> / <code>hidePopover</code>) で操作しています。</p>
+    </div>
+
+    <script>
+      const jsPopover = document.getElementById('popover-js');
+      document.getElementById('js-open').addEventListener('click', () => {
+        jsPopover.showPopover();
+      });
+      document.getElementById('js-close').addEventListener('click', () => {
+        jsPopover.hidePopover();
+      });
+    </script>
+  </section>
+
+</body>
+</html>

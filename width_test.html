@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>width test</title>
+  <link rel="stylesheet" href="base.css">
+</head>
+<body>
+  <h1>width test</h1>
+  <ul>
+    <li>0</li>
+    <li>100</li>
+    <li>200</li>
+    <li>300</li>
+    <li>400</li>
+    <li>500</li>
+    <li>600</li>
+    <li>700</li>
+    <li>800</li>
+    <li>900</li>
+    <li>1000</li>
+    <li>1100</li>
+    <li>1200</li>
+  </ul>
+  <style>
+    body {
+      margin: 0;
+    }
+    ul,li {
+      margin:0;
+      padding-left:0;
+      list-style:none
+    }
+    ul {
+      white-space: nowrap;
+      font-size: 0;
+      width: fit-content;
+      border-right: 1px solid;
+    }
+    li {
+      display: inline-block;
+      width: 99px;
+      border-left: 1px black solid;
+      font-size: initial;
+    }
+    li:after {
+      content: "　";
+      display: inline-block;
+      width: 50px;
+      border-left: 1px black dashed;
+      float: right;
+    }
+  </style>
+</body>
+</html>
