@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="base.css">
+  </head>
+  <body>
+    <h1>form</h1>
+    <h2>inputタグ</h2>
+    <div class="discription">
+      細かいものはこちらを使ったほうが良い
+      <a href="https://webliker.info/39533/">https://webliker.info/39533/</a>
+    </div>
+    <form action="cgi-bin/aaa.cgi" method="post">
+      <table border="0">
+        <tr>
+          <td>数値：</td>
+          <td><input type="number" name="id" size="8" maxlength="8" /></td>
+        </tr>
+        <tr>
+          <td>数値（スクロールで数値の変更を無効化）：</td>
+          <td>
+            <input type="number" name="id" size="8" maxlength="8" onwheel="onWheelHandler(event)"/>
+            <script>
+              // イベントハンドラを定義
+              const onWheelHandler = (e) => {
+                console.log("onWheelHandler", e)
+                e.currentTarget.blur()
+                e.stopPropagation()
+              }
+            </script>
+          </td>
+        </tr>
+        <tr>
+          <td>テキスト：</td>
+          <td><input type="text" name="name" size="30" maxlength="20" /></td>
+        </tr>
+        <tr>
+          <td>パスワード：</td>
+          <td><input type="password" name="pass" size="6" maxlength="4" /></td>
+        </tr>
+        <tr>
+          <td>ラジオ：</td>
+          <td>
+            <label><input type="radio" name="gakunen" value="１年生" />１年生</label>
+            <label><input type="radio" name="gakunen" value="２年生" />２年生</label>
+            <label><input type="radio" name="gakunen" value="３年生" />３年生</label>
+            <label><input type="radio" name="gakunen" value="４年生" />４年生</label>
+            <label><input type="radio" name="gakunen" value="５年生" />５年生</label>
+            <label><input type="radio" name="gakunen" value="６年生" />６年生</label>
+          </td>
+        </tr>
+        <tr>
+          <td>チェック：</td>
+          <td>
+            <label><input type="checkbox" name="kamoku" value="国語" />国語</label>
+            <label><input type="checkbox" name="kamoku" value="英語" />英語</label>
+            <label><input type="checkbox" name="kamoku" value="算数" />算数</label>
+            <label><input type="checkbox" name="kamoku" value="理科" />理科</label>
+            <label><input type="checkbox" name="kamoku" value="社会" />社会</label>
+            <label><input type="checkbox" name="kamoku" value="体育" />体育</label>
+          </td>
+        </tr>
+        <tr>
+          <td>ファイル：</td>
+          <td><input type="file" name="syukudai" /></td>
+        </tr>
+        <tr>
+          <td>ファイル 画像：</td>
+          <td><input type="file" name="syukudai" accept="image/png, image/jpeg, image/gif"/></td>
+        </tr>
+        <tr>
+          <td>ファイル 複数：</td>
+          <td><input type="file" name="syukudai" multiple="multiple"/></td>
+        </tr>
+        <tr>
+          <td>日付：</td>
+          <td><input type="date" name="date" /></td>
+        </tr>
+        <tr>
+          <td>日時：</td>
+          <td><input type="datetime-local" name="datetime-local" /></td>
+        </tr>
+        <tr>
+          <td>月：</td>
+          <td><input type="month" name="month" /></td>
+        </tr>
+        <tr>
+          <td>select：</td>
+          <td>
+            <select name="blood">
+              <option value="A">A型</option>
+              <option value="B">B型</option>
+              <option value="O">O型</option>
+              <option value="AB">AB型</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>select 複数行：</td>
+          <td>
+            <select name="horoscope" size="12">
+              <option value="Aries">おひつじ座</option>
+              <option value="Taurus">おうし座</option>
+              <option value="Gemini">ふたご座</option>
+              <option value="Cancer">かに座</option>
+              <option value="Leo">しし座</option>
+              <option value="Virgo">おとめ座</option>
+              <option value="Libra">てんびん座</option>
+              <option value="Scorpio">さそり座</option>
+              <option value="Saggitarius">いて座</option>
+              <option value="Capricorn">やぎ座</option>
+              <option value="Aquarius">みずがめ座</option>
+              <option value="Pisces">うお座</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>色を選択：</td>
+          <td><input type="color" value="#0b80dc"></td>
+        </tr>
+        <tr>
+          <td>範囲を選択：</td>
+          <td><input type="range" min="0" max="100"></td>
+        </tr>
+        <tr>
+          <td>範囲を選択 step：</td>
+          <td><input type="range" step="20" min="0" max="100"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <input type="submit" value="送信" />
+            <input type="reset" value="リセット" />
+          </td>
+        </tr>
+      </table>
+    </form>
+    <h2>検索</h2>
+    <table>
+      <tr>
+        <td>候補表示：</td>
+        <td>
+          <input type="search" autocomplete="on" list="list">
+          <!-- 候補を表示 -->
+          <datalist id="list">
+            <option value="html">
+            <option value="css">
+            <option value="javascript">
+            <option value="webデザイン入門">
+          </datalist>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><input type="submit" value="検索"></td>
+      </tr>
+    </table>
+
+    <h3>入力チェック</h3>
+    <form action="cgi-bin/aaa.cgi" method="post">
+      <table>
+        <tr>
+          <td>メール：</td>
+          <td><input type="email" /></td>
+        </tr>
+        <tr>
+          <td>url：</td>
+          <td><input type="url" /></td>
+        </tr>
+        <tr>
+          <td>pattern：</td>
+          <td>
+            <input type="tel" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" placeholder="090-1234-5678">
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <input type="submit" value="送信" />
+            <input type="reset" value="リセット" />
+          </td>
+        </tr>
+      </table>
+    </form>
+    <style>
+      td:first-child {
+        font-weight: 800;
+        text-align: right;
+        min-width: 200px;
+      }
+    </style>
+  </body>
+</html>

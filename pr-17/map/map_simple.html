@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map</title>
+  <link rel="stylesheet" href="../base.css">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C47VJ5PWGB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-C47VJ5PWGB');
+  </script>
+</head>
+<body>
+  <h1>GoogleMap</h1>
+  <nav class="">
+    <ol>
+        <li class=""><a href="map.html">map</a></li>
+        <li class=""><a href="map_simple.html">map_simple</a></li>
+        <li class=""><a href="map_api_custom_marker.html">map_api_custom_marker</a></li>
+        <li class=""><a href="map_api_info_window.html">map_api_info_window</a></li>
+        <li class=""><a href="map_api_marker_clustering.html">map_api_marker_clustering</a></li>
+    </ol>
+  </nav>
+  <section>
+    <h2>GoogleMapAPI</h2>
+    <section>
+      <h3>simple</h3>
+      <div id="map"></div>
+      <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtqjDbVV9ySxQGoPJtK84DszPnCGE0IcU&callback=initMap"
+        defer
+      ></script>
+      <script>
+        let map;
+
+        function initMap() {
+          map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 35.6896342, lng: 139.6921007 },
+            zoom: 16,
+          });
+        }
+
+        window.initMap = initMap;
+      </script>
+    </section>
+    <style>
+      #map,
+      .map {
+        height: 300px;
+      }
+    </style>
+  </section>
+</body>
+</html>
